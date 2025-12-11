@@ -4,7 +4,9 @@ import { ZodError } from "zod";
 import AppError from "../errors/AppError.js";
 import type { TErrorSources } from "../interfaces/error.js";
 import handleZodError from "../errors/handleZodError.js";
+import handleValidationError from "../errors/handleValidationError.js";
 import handleDuplicateError from "../errors/handleDuplicateError.js";
+import handleCastError from "../errors/handleCastError.js";
 
 const globalErrorHandler: ErrorRequestHandler = (err, req, res, next): void => {
   //setting default values
@@ -21,6 +23,16 @@ const globalErrorHandler: ErrorRequestHandler = (err, req, res, next): void => {
   //check for validation error
   if (err instanceof ZodError) {
     const simplifiedError = handleZodError(err);
+    statusCode = simplifiedError.statusCode;
+    message = simplifiedError.message;
+    errorMessages = simplifiedError.errorSources;
+  } else if (err?.name === "ValidationError") {
+    const simplifiedError = handleValidationError(err);
+    statusCode = simplifiedError.statusCode;
+    message = simplifiedError.message;
+    errorMessages = simplifiedError.errorSources;
+  } else if (err?.name === "CastError") {
+    const simplifiedError = handleCastError(err);
     statusCode = simplifiedError.statusCode;
     message = simplifiedError.message;
     errorMessages = simplifiedError.errorSources;
