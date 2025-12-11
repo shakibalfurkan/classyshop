@@ -2,7 +2,6 @@ import nodemailer from "nodemailer";
 import ejs from "ejs";
 import config from "../config/index.js";
 import path from "path";
-import AppError from "../errors/AppError.js";
 
 const transporter = nodemailer.createTransport({
   host: config.smtp_host,
