@@ -20,7 +20,7 @@ const userRegistrationSchema = z.object({
       })
       .trim(),
     password: z
-      .string("Password must be a string")
+      .string()
       .min(8, { error: "Password must be 8 characters long" })
       .max(20, { error: "Password must be less than 20 characters" })
       .trim()

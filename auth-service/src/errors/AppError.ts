@@ -1,15 +1,10 @@
 class AppError extends Error {
   public readonly statusCode: number;
-  public readonly isOperational: boolean;
-  constructor(
-    statusCode: number,
-    isOperational = true,
-    message: string,
-    stack = ""
-  ) {
+
+  constructor(statusCode: number, message: string, stack = "") {
     super(message);
     this.statusCode = statusCode;
-    this.isOperational = isOperational;
+
     if (stack) {
       this.stack = stack;
     } else {
