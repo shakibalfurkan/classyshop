@@ -9,3 +9,7 @@ export type TUserVerificationPayload = {
   password: string;
   otp: string;
 };
+export type TLoginPayload = {
+  email: string;
+  password: string;
+};

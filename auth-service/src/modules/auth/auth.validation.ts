@@ -53,7 +53,31 @@ const userVerificationSchema = z.object({
   }),
 });
 
+const userLoginSchema = z.object({
+  body: z.object({
+    email: z
+      .email({
+        error: (issue) =>
+          issue.input === undefined
+            ? "Email is required"
+            : "Invalid email address",
+      })
+      .trim(),
+    password: z
+      .string({
+        error: (issue) =>
+          issue.input === undefined
+            ? "Password is required"
+            : "Password must be a string",
+      })
+      .min(8, { error: "Password must be 8 characters long" })
+      .max(20, { error: "Password must be less than 20 characters" })
+      .trim(),
+  }),
+});
+
 export const AuthValidation = {
   userRegistrationSchema,
   userVerificationSchema,
+  userLoginSchema,
 };

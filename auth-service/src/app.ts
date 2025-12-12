@@ -5,6 +5,7 @@ import express, {
 } from "express";
 
 import cors from "cors";
+import cookieParser from "cookie-parser";
 import notFoundError from "./middlewares/notFoundError.js";
 import globalErrorHandler from "./middlewares/globalErrorHandler.js";
 import globalRouter from "./routes/index.js";
@@ -13,9 +14,16 @@ export async function createApp(): Promise<express.Express> {
   const app = express();
 
   // Middleware setup
-  app.use(cors());
+  app.use(
+    cors({
+      origin: "http://localhost:3000",
+      allowedHeaders: ["Content-Type", "Authorization"],
+      credentials: true,
+    })
+  );
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
+  app.use(cookieParser());
 
   app.get("/", (req: Request, res: Response) => {
     res.status(200).json({
