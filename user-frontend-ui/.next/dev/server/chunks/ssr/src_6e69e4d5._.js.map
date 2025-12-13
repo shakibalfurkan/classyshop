@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 4, "column": 0}, "map": {"version":3,"sources":["file:///media/DevZone/classyshop/user-frontend-ui/src/components/shared/Header.tsx"],"sourcesContent":["export default function Header() {\n  return (\n    <section>\n      <h1>This is Header component</h1>\n    </section>\n  );\n}\n"],"names":[],"mappings":";;;;;;AAAe,SAAS;IACtB,qBACE,8OAAC;kBACC,cAAA,8OAAC;sBAAG;;;;;;;;;;;AAGV"}},
+    {"offset": {"line": 29, "column": 0}, "map": {"version":3,"sources":["file:///media/DevZone/classyshop/user-frontend-ui/src/app/%28MainLayout%29/layout.tsx"],"sourcesContent":["import Header from \"@/components/shared/Header\";\nimport type { Metadata } from \"next\";\n\nexport const metadata: Metadata = {\n  title: \"ClassyShop\",\n  description: \"Welcome to ClassyShop. Your one stop shop for all things.\",\n};\n\nexport default function MainLayout({\n  children,\n}: Readonly<{\n  children: React.ReactNode;\n}>) {\n  return (\n    <section>\n      <Header />\n      <section>{children}</section>\n    </section>\n  );\n}\n"],"names":[],"mappings":";;;;;;;AAAA;;;AAGO,MAAM,WAAqB;IAChC,OAAO;IACP,aAAa;AACf;AAEe,SAAS,WAAW,EACjC,QAAQ,EAGR;IACA,qBACE,8OAAC;;0BACC,8OAAC,iJAAM;;;;;0BACP,8OAAC;0BAAS;;;;;;;;;;;;AAGhB"}}]
+}

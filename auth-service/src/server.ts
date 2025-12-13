@@ -1,4 +1,3 @@
-import { cwd } from "process";
 import { createApp } from "./app.js";
 import config from "./config/index.js";
 import { Database } from "./database/index.js";

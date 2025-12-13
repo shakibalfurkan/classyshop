@@ -29,9 +29,6 @@ importers:
       morgan:
         specifier: ^1.10.1
         version: 1.10.1
-      swagger-ui-express:
-        specifier: ^5.0.1
-        version: 5.0.1(express@5.2.1)
       tsx:
         specifier: ^4.21.0
         version: 4.21.0
@@ -54,9 +51,6 @@ importers:
       '@types/node':
         specifier: ^24.10.2
         version: 24.10.2
-      '@types/swagger-ui-express':
-        specifier: ^4.1.8
-        version: 4.1.8
       typescript:
         specifier: ^5.9.3
         version: 5.9.3
@@ -219,9 +213,6 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@scarf/scarf@1.4.0':
-    resolution: {integrity: sha512-xxeapPiUXdZAE3che6f3xogoJPeZgig6omHEy1rIY5WVsB3H2BHNnZH+gHG6x91SCWyQCzWGsuL2Hh3ClO5/qQ==}
-
   '@types/body-parser@1.19.6':
     resolution: {integrity: sha512-HLFeCYgz89uk22N5Qg3dvGvsv46B8GLvKKo1zKG4NybA8U2DiEO3w9lqGg29t/tfLRJpJ6iQxnVw4OnB7MoM9g==}
 
@@ -265,9 +256,6 @@ packages:
 
   '@types/serve-static@2.2.0':
     resolution: {integrity: sha512-8mam4H1NHLtu7nmtalF7eyBH14QyOASmcxHhSfEoRyr0nP/YdoesEtU+uSRvMe96TW/HPTtkoKqQLl53N7UXMQ==}
-
-  '@types/swagger-ui-express@4.1.8':
-    resolution: {integrity: sha512-AhZV8/EIreHFmBV5wAs0gzJUNq9JbbSXgJLQubCC0jtIo6prnI9MIRRxnU4MZX9RB9yXxF1V4R7jtLl/Wcj31g==}
 
   accepts@2.0.0:
     resolution: {integrity: sha512-5cvg6CtKwfgdmVqY1WIiXKc3Q1bkRqGLi+2W/6ao+6Y7gu/RCwRuAhGEzh5B4KlszSuTLgZYuqFqo5bImjNKng==}
@@ -644,15 +632,6 @@ packages:
     resolution: {integrity: sha512-DvEy55V3DB7uknRo+4iOGT5fP1slR8wQohVdknigZPMpMstaKJQWhwiYBACJE3Ul2pTnATihhBYnRhZQHGBiRw==}
     engines: {node: '>= 0.8'}
 
-  swagger-ui-dist@5.30.3:
-    resolution: {integrity: sha512-giQl7/ToPxCqnUAx2wpnSnDNGZtGzw1LyUw6ZitIpTmdrvpxKFY/94v1hihm0zYNpgp1/VY0jTDk//R0BBgnRQ==}
-
-  swagger-ui-express@5.0.1:
-    resolution: {integrity: sha512-SrNU3RiBGTLLmFU8GIJdOdanJTl4TOmT27tt3bWWHppqYmAZ6IDuEuBvMU6nZq0zLEe6b/1rACXCgLZqO6ZfrA==}
-    engines: {node: '>= v0.10.32'}
-    peerDependencies:
-      express: '>=4.0.0 || >=5.0.0-beta'
-
   toidentifier@1.0.1:
     resolution: {integrity: sha512-o5sSPKEkg/DIQNmH43V0/uerLrpzVedkUh8tGNvaeXpfpuwjKenlSox/2O/BTlZUtEe+JG7s5YhEz608PlAHRA==}
     engines: {node: '>=0.6'}
@@ -765,8 +744,6 @@ snapshots:
   '@esbuild/win32-x64@0.27.1':
     optional: true
 
-  '@scarf/scarf@1.4.0': {}
-
   '@types/body-parser@1.19.6':
     dependencies:
       '@types/connect': 3.4.38
@@ -823,11 +800,6 @@ snapshots:
     dependencies:
       '@types/http-errors': 2.0.5
       '@types/node': 24.10.2
-
-  '@types/swagger-ui-express@4.1.8':
-    dependencies:
-      '@types/express': 5.0.6
-      '@types/serve-static': 2.2.0
 
   accepts@2.0.0:
     dependencies:
@@ -1263,15 +1235,6 @@ snapshots:
       side-channel-weakmap: 1.0.2
 
   statuses@2.0.2: {}
-
-  swagger-ui-dist@5.30.3:
-    dependencies:
-      '@scarf/scarf': 1.4.0
-
-  swagger-ui-express@5.0.1(express@5.2.1):
-    dependencies:
-      express: 5.2.1
-      swagger-ui-dist: 5.30.3
 
   toidentifier@1.0.1: {}
 
