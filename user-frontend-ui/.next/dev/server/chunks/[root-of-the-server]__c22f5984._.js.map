@@ -1,6 +1,0 @@
-{
-  "version": 3,
-  "sources": [],
-  "sections": [
-    {"offset": {"line": 40, "column": 0}, "map": {"version":3,"sources":["file:///media/DevZone/classyshop/user-frontend-ui/proxy.ts"],"sourcesContent":["export function proxy(request: Request) {}\n"],"names":[],"mappings":";;;;AAAO,SAAS,MAAM,OAAgB,GAAG"}}]
-}

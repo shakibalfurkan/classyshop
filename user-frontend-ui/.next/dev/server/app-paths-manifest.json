@@ -1,5 +1,0 @@
-{
-  "/(AuthLayout)/login/page": "app/(AuthLayout)/login/page.js",
-  "/(AuthLayout)/signup/page": "app/(AuthLayout)/signup/page.js",
-  "/(MainLayout)/page": "app/(MainLayout)/page.js"
-}
