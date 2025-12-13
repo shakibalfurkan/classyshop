@@ -14,6 +14,7 @@ import { isPasswordMatched } from "../../utils/passwordManager.js";
 import { createToken } from "../../utils/jwtHelper/index.js";
 import config from "../../config/index.js";
 import { setCookie } from "../../utils/cookieHandler.js";
+import handleForgotPassword from "../../utils/handleForgotPassword.js";
 
 const registerUserInToDB = async (payload: TRegisterPayload) => {
   const { name, email } = payload;
@@ -94,8 +95,15 @@ const loginUser = async (payload: TLoginPayload, res: Response) => {
   return { user: userData, accessToken };
 };
 
+const forgotUserPassword = async (email: string) => {
+  await handleForgotPassword(email, "user");
+
+  return null;
+};
+
 export const AuthService = {
   registerUserInToDB,
   verifyUser,
   loginUser,
+  forgotUserPassword,
 };

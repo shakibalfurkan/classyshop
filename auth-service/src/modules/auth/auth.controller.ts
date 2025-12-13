@@ -34,8 +34,20 @@ const loginUser = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const forgotUserPassword = catchAsync(async (req: Request, res: Response) => {
+  const result = await AuthService.forgotUserPassword(req.body.email);
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "OTP sent to the email. Please verify your account.",
+    data: result,
+  });
+});
+
 export const AuthController = {
   registerUser,
   verifyUser,
   loginUser,
+  forgotUserPassword,
 };

@@ -76,8 +76,22 @@ const userLoginSchema = z.object({
   }),
 });
 
+const forgotPasswordSchema = z.object({
+  body: z.object({
+    email: z
+      .email({
+        error: (issue) =>
+          issue.input === undefined
+            ? "Email is required"
+            : "Invalid email address",
+      })
+      .trim(),
+  }),
+});
+
 export const AuthValidation = {
   userRegistrationSchema,
   userVerificationSchema,
   userLoginSchema,
+  forgotPasswordSchema,
 };
