@@ -4,7 +4,7 @@ import AppError from "../errors/AppError.js";
 import { jwtHelper } from "../utils/jwtHelper/index.js";
 import config from "../config/index.js";
 import type { JwtPayload } from "jsonwebtoken";
-import { USER_ROLES } from "../modules/user/user.constant.js";
+import { USER_ROLES } from "../constant/index.js";
 import User from "../modules/user/user.model.js";
 import { AuthError } from "../errors/authError.js";
 

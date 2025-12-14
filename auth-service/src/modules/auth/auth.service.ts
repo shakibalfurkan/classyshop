@@ -19,7 +19,7 @@ import config from "../../config/index.js";
 import { setCookie } from "../../utils/cookieHandler.js";
 import handleForgotPassword from "../../utils/handleForgotPassword.js";
 import jwt, { type JwtPayload } from "jsonwebtoken";
-import { USER_ROLES } from "../user/user.constant.js";
+import { USER_ROLES } from "../../constant/index.js";
 
 const registerUserInToDB = async (payload: TRegisterPayload) => {
   const { name, email } = payload;

@@ -3,7 +3,7 @@ import { AuthController } from "./auth.controller.js";
 import validateRequest from "../../middlewares/validateRequest.js";
 import { AuthValidation } from "./auth.validation.js";
 import { auth } from "../../middlewares/auth.js";
-import { USER_ROLES } from "../user/user.constant.js";
+import { USER_ROLES } from "../../constant/index.js";
 
 const router = Router();
 

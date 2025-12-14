@@ -1,5 +1,5 @@
 import AppError from "../errors/AppError.js";
-import { USER_ROLES } from "../modules/user/user.constant.js";
+import { USER_ROLES } from "../constant/index.js";
 import User from "../modules/user/user.model.js";
 import checkOtpRestrictions from "./checkOtpRestrictions.js";
 import sendOtp from "./sendOtp.js";
