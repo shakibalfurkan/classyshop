@@ -14,11 +14,13 @@ import { SeparatorWithText } from "@/components/ui/separator";
 import { signupSchema } from "@/schemas/auth.schema";
 import { AlertCircleIcon } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Controller, set, useForm } from "react-hook-form";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useSignupContext } from "@/context/SignupContext";
+import { useUserRegistration } from "@/hooks/auth.hook";
 
 type TFormData = {
   name: string;
@@ -28,8 +30,20 @@ type TFormData = {
 
 export default function Singup() {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-  const [serverError, setServerError] = useState<string | null>(null);
+
+  const redirect = useSearchParams().get("redirect");
   const router = useRouter();
+
+  const { setSignupData } = useSignupContext();
+
+  const {
+    mutate: registerUser,
+    data: userData,
+    isSuccess,
+    isPending,
+    isError,
+    error,
+  } = useUserRegistration();
 
   const {
     handleSubmit,
@@ -45,14 +59,18 @@ export default function Singup() {
   });
 
   const onSubmit = (data: TFormData) => {
-    const name = data.name;
-    const email = data.email;
-    const password = data.password;
-
-    router.push("/verify-otp");
-
-    console.log(name, email, password);
+    registerUser(data);
+    setSignupData(data);
   };
+
+  useEffect(() => {
+    if (!isPending && isSuccess) {
+      const verifyOtpUrl = redirect
+        ? `/verify-otp?redirect=${redirect}`
+        : "/verify-otp";
+      router.push(verifyOtpUrl);
+    }
+  }, [isPending, isSuccess, redirect, router]);
 
   return (
     <section className="max-w-7xl mx-auto p-4">
@@ -66,7 +84,7 @@ export default function Singup() {
           </p>
         </div>
         <div className="w-full max-w-md border rounded-lg p-6  shadow-sm">
-          {serverError && (
+          {isError && (
             <Alert
               variant="destructive"
               className="mb-5 border-red-500 bg-red-50"
@@ -74,7 +92,7 @@ export default function Singup() {
               <AlertCircleIcon />
               <AlertTitle>Unable to sing up.</AlertTitle>
               <AlertDescription>
-                <p>{serverError}</p>
+                <p>{error?.message}</p>
               </AlertDescription>
             </Alert>
           )}
@@ -141,7 +159,7 @@ export default function Singup() {
                 />
                 <p
                   onClick={() => setIsPasswordVisible(!isPasswordVisible)}
-                  className={`absolute  ${
+                  className={`absolute w-fit  ${
                     errors.password ? "top-[42%]" : "top-[60%]"
                   } right-3 cursor-pointer text-lg`}
                 >
@@ -150,8 +168,12 @@ export default function Singup() {
               </div>
             </FieldGroup>
 
-            <Button type="submit" className="w-full hover:cursor-pointer">
-              Sign Up
+            <Button
+              disabled={isPending}
+              type="submit"
+              className="w-full hover:cursor-pointer"
+            >
+              {isPending ? "Signing Up..." : "Sign Up"}
             </Button>
           </form>
           <div className="flex items-center justify-center gap-2 mt-3 mb-5">

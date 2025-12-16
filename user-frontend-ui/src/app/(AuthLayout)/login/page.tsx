@@ -29,7 +29,6 @@ type TFormData = {
 
 export default function Login() {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-  const [serverError, setServerError] = useState<string | null>(null);
 
   const {
     handleSubmit,
@@ -66,7 +65,7 @@ export default function Login() {
           </p>
         </div>
         <div className="w-full max-w-md border rounded-lg p-6 shadow-sm">
-          {serverError && (
+          {/* {isError && (
             <Alert
               variant="destructive"
               className="mb-5 border-red-500 bg-red-50"
@@ -74,10 +73,10 @@ export default function Login() {
               <AlertCircleIcon />
               <AlertTitle>Unable to sing in.</AlertTitle>
               <AlertDescription>
-                <p>{serverError}</p>
+                <p>{error?.message}</p>
               </AlertDescription>
             </Alert>
-          )}
+          )} */}
           <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
             <FieldGroup>
               <Controller

@@ -6,10 +6,67 @@ import {
   InputOTPGroup,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
-import { useState } from "react";
+import { useSignupContext } from "@/context/SignupContext";
+import { useUserRegistration, useVerifyUser } from "@/hooks/auth.hook";
+import { useOtpCountdown } from "@/hooks/useOtpCountdown";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function VerifyOTP() {
   const [otpValue, setOtpValue] = useState("");
+  const { signupData, setSignupData } = useSignupContext();
+
+  const { isActive, timeLeft, start } = useOtpCountdown();
+
+  const router = useRouter();
+
+  const redirect = useSearchParams().get("redirect");
+
+  const {
+    mutate: verifyUser,
+    data: userData,
+    isPending,
+    isSuccess,
+    isError,
+    error,
+  } = useVerifyUser();
+
+  const {
+    mutate: registerUser,
+    data: registerUserData,
+    isSuccess: isRegisterSuccess,
+    isPending: isRegisterPending,
+    isError: isRegisterError,
+  } = useUserRegistration();
+
+  const handleVerifyOtp = () => {
+    verifyUser({ ...signupData!, otp: otpValue });
+
+    if (!isPending && isSuccess) {
+      setSignupData(null);
+    }
+  };
+
+  useEffect(() => {
+    if (!isPending && isSuccess) {
+      const redirectUrl = redirect ? `/login?redirect=${redirect}` : "/login";
+      router.push(redirectUrl);
+    }
+  }, [isPending, isSuccess, router]);
+
+  const handleResendOtp = () => {
+    registerUser(signupData!);
+  };
+
+  useEffect(() => {
+    if (isRegisterSuccess) {
+      start();
+    }
+  }, [isRegisterSuccess]);
+
+  useEffect(() => {
+    start();
+  }, []);
 
   return (
     <section className="max-w-7xl mx-auto min-h-[87vh] flex items-center justify-center p-3">
@@ -37,15 +94,28 @@ export default function VerifyOTP() {
           </InputOTP>
         </div>
         <div>
-          <Button onClick={() => console.log(otpValue)} className="w-full">
-            Verify
+          <Button
+            disabled={!otpValue || isPending}
+            onClick={() => handleVerifyOtp()}
+            className="w-full cursor-pointer"
+          >
+            {isPending ? "Verifying..." : "Verify OTP"}
           </Button>
         </div>
         <div className="mt-4 text-center space-y-1">
           <p className="text-gray-500">Didn&apos;t get the OTP? </p>
 
-          <button className="text-primary cursor-pointer font-semibold text-sm">
-            RESEND OTP in 60s
+          <button
+            onClick={() => {
+              handleResendOtp();
+              start();
+            }}
+            disabled={isActive}
+            className={`text-primary ${
+              !isActive && "cursor-pointer"
+            } font-semibold text-sm`}
+          >
+            {isActive ? "Resend OTP in " + timeLeft + "'S" : "RESEND OTP"}
           </button>
           <p className="text-gray-500 text-sm">
             A new OTP has been sent to your email.

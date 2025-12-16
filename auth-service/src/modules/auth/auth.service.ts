@@ -14,11 +14,10 @@ import {
   hashPassword,
   isPasswordMatched,
 } from "../../utils/passwordManager.js";
-import { createToken, jwtHelper } from "../../utils/jwtHelper/index.js";
+import { createToken } from "../../utils/jwtHelper/index.js";
 import config from "../../config/index.js";
 import { setCookie } from "../../utils/cookieHandler.js";
 import handleForgotPassword from "../../utils/handleForgotPassword.js";
-import jwt, { type JwtPayload } from "jsonwebtoken";
 import { USER_ROLES } from "../../constant/index.js";
 
 const registerUserInToDB = async (payload: TRegisterPayload) => {
@@ -39,6 +38,7 @@ const registerUserInToDB = async (payload: TRegisterPayload) => {
 
 const verifyUser = async (payload: TUserVerificationPayload) => {
   const { name, email, password, otp } = payload;
+  console.log(payload);
 
   const isUserExist = await User.findOne({ email });
 
