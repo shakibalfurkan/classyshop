@@ -39,6 +39,7 @@ router.post(
 
 router.patch(
   "/user/change-password",
+  auth(USER_ROLES.USER),
   validateRequest(AuthValidation.changeUserPasswordSchema),
   AuthController.resetUserPassword
 );

@@ -66,3 +66,67 @@ export const loginUser = async (userData: FieldValues) => {
     throw new Error("Something went wrong");
   }
 };
+
+export const forgotUserPassword = async (userData: FieldValues) => {
+  try {
+    const { data } = await axiosInstance.post(
+      "/api/v1/user/forgot-password",
+      userData
+    );
+
+    return data;
+  } catch (error: any) {
+    if (isAxiosError(error)) {
+      const message =
+        error.response?.data?.message ||
+        error.response?.data?.error ||
+        "Forgot password failed";
+
+      throw new Error(message);
+    }
+
+    throw new Error("Something went wrong");
+  }
+};
+export const resetUserPassword = async (userData: FieldValues) => {
+  try {
+    const { data } = await axiosInstance.post(
+      "/api/v1/user/reset-password",
+      userData
+    );
+
+    return data;
+  } catch (error: any) {
+    if (isAxiosError(error)) {
+      const message =
+        error.response?.data?.message ||
+        error.response?.data?.error ||
+        "Reset password failed";
+
+      throw new Error(message);
+    }
+
+    throw new Error("Something went wrong");
+  }
+};
+export const changeUserPassword = async (userData: FieldValues) => {
+  try {
+    const { data } = await axiosInstance.post(
+      "/api/v1/user/change-password",
+      userData
+    );
+
+    return data;
+  } catch (error: any) {
+    if (isAxiosError(error)) {
+      const message =
+        error.response?.data?.message ||
+        error.response?.data?.error ||
+        "Change password failed";
+
+      throw new Error(message);
+    }
+
+    throw new Error("Something went wrong");
+  }
+};
