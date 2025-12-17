@@ -167,10 +167,49 @@ const resetUserPassword = async (
   return null;
 };
 
+const changeUserPassword = async (
+  email: string,
+  newPassword: string,
+  decodedEmail: string
+) => {
+  if (!email || !newPassword) {
+    throw new AppError(400, "Please provide email and new password");
+  }
+
+  const user = await User.findOne({ email });
+
+  if (!user) {
+    throw new AppError(400, "User does not exist!");
+  }
+
+  if (decodedEmail !== user.email) {
+    throw new AppError(401, "You are not authorized!");
+  }
+
+  const isSamePassword = await isPasswordMatched(
+    newPassword,
+    user.password as string
+  );
+
+  if (isSamePassword) {
+    throw new AppError(400, "Please provide new password");
+  }
+
+  const newHashedPassword = await hashPassword(
+    newPassword,
+    config.bcrypt_salt_round!
+  );
+
+  await User.findOneAndUpdate({ email }, { password: newHashedPassword });
+
+  return null;
+};
+
 export const AuthService = {
   registerUserInToDB,
   verifyUser,
   loginUser,
   forgotUserPassword,
   resetUserPassword,
+  changeUserPassword,
 };

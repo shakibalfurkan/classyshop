@@ -1,4 +1,4 @@
-import z from "zod";
+import z, { email } from "zod";
 
 const userRegistrationSchema = z.object({
   body: z.object({
@@ -89,14 +89,12 @@ const forgotPasswordSchema = z.object({
   }),
 });
 
-const verifyForgotUserPassword = z.object({
+const resetUserPasswordSchema = z.object({
   body: z.object({
-    email: z
-      .email({
+    id: z
+      .string({
         error: (issue) =>
-          issue.input === undefined
-            ? "Email is required"
-            : "Invalid email address",
+          issue.input === undefined ? "ID is required" : "ID must be a string",
       })
       .trim(),
     newPassword: z
@@ -107,16 +105,18 @@ const verifyForgotUserPassword = z.object({
             : "New Password must be a string",
       })
       .trim(),
+    token: z
+      .string({
+        error: (issue) =>
+          issue.input === undefined
+            ? "Token is required"
+            : "Token must be a string",
+      })
+      .trim(),
   }),
-  otp: z
-    .string({
-      error: (issue) =>
-        issue.input === undefined ? "OPT is required" : "OPT must be a string",
-    })
-    .trim(),
 });
 
-const resetUserPasswordSchema = z.object({
+const changeUserPasswordSchema = z.object({
   body: z.object({
     email: z
       .email({
@@ -142,6 +142,6 @@ export const AuthValidation = {
   userVerificationSchema,
   userLoginSchema,
   forgotPasswordSchema,
-  verifyForgotUserPassword,
   resetUserPasswordSchema,
+  changeUserPasswordSchema,
 };
