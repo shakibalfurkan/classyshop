@@ -48,3 +48,30 @@ export const forgotSchema = z.object({
       issue.input === undefined ? "Email is required." : "Invalid email.",
   }),
 });
+
+export const resetPasswordSchema = z
+  .object({
+    newPassword: z
+      .string({
+        error: (issue) =>
+          issue.input === undefined
+            ? "New password is required."
+            : "Invalid new password.",
+      })
+      .min(8, { error: "Password must be 8 characters long" })
+      .max(20, { error: "Password must be less than 20 characters" }),
+
+    confirmNewPassword: z
+      .string({
+        error: (issue) =>
+          issue.input === undefined
+            ? "Confirm new password is required."
+            : "Invalid confirm new password.",
+      })
+      .min(8, { error: "Password must be 8 characters long" })
+      .max(20, { error: "Password must be less than 20 characters" }),
+  })
+  .refine((data) => data.newPassword === data.confirmNewPassword, {
+    message: "Passwords do not match",
+    path: ["confirmNewPassword"],
+  });

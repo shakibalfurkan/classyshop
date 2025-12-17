@@ -130,3 +130,23 @@ export const changeUserPassword = async (userData: FieldValues) => {
     throw new Error("Something went wrong");
   }
 };
+
+export const tokenCheck = async (token: string) => {
+  try {
+    const { data } = await axiosInstance.post(
+      `/api/v1/token-check?token=${token}`
+    );
+    return data;
+  } catch (error: any) {
+    if (isAxiosError(error)) {
+      const message =
+        error.response?.data?.message ||
+        error.response?.data?.error ||
+        "Token check failed";
+
+      throw new Error(message);
+    }
+
+    throw new Error("Something went wrong");
+  }
+};

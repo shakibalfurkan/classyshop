@@ -4,6 +4,7 @@ import {
   loginUser,
   registerUser,
   resetUserPassword,
+  tokenCheck,
   verifyUser,
 } from "@/services/AuthService";
 import { useMutation } from "@tanstack/react-query";
@@ -78,6 +79,19 @@ export const useChangeUserPassword = () => {
   return useMutation<any, Error, FieldValues>({
     mutationKey: ["CHANGE_USER_PASSWORD"],
     mutationFn: async (userData) => await changeUserPassword(userData),
+    onSuccess: (data) => {
+      toast.success(data.message);
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
+};
+
+export const useTokenCheck = () => {
+  return useMutation<any, Error, string>({
+    mutationKey: ["TOKEN_CHECK"],
+    mutationFn: async (token) => await tokenCheck(token),
     onSuccess: (data) => {
       toast.success(data.message);
     },

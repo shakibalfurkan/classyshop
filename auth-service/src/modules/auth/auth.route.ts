@@ -44,6 +44,6 @@ router.patch(
   AuthController.resetUserPassword
 );
 
-router.post("/token-check:token", AuthController.tokenCheck);
+router.post("/token-check", AuthController.tokenCheck);
 
 export const AuthRoutes: Router = router;

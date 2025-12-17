@@ -137,7 +137,9 @@ const resetUserPassword = async (newPassword: string, token: string) => {
     throw new AppError(401, "You are not authorized!");
   }
 
-  const user = await User.findOne({ email: decodedToken.email });
+  const user = await User.findOne({ email: decodedToken.email }).select(
+    "+password"
+  );
 
   if (!user) {
     throw new AppError(400, "User already exists with this email!");
@@ -146,7 +148,7 @@ const resetUserPassword = async (newPassword: string, token: string) => {
   const isSamePassword = await isPasswordMatched(newPassword, user.password!);
 
   if (isSamePassword) {
-    throw new AppError(400, "Please provide new password");
+    throw new AppError(400, "New password cannot be same as old password");
   }
 
   const newHashedPassword = await hashPassword(
@@ -187,7 +189,7 @@ const changeUserPassword = async (
   );
 
   if (isSamePassword) {
-    throw new AppError(400, "Please provide new password");
+    throw new AppError(400, "New password cannot be same as old password");
   }
 
   const newHashedPassword = await hashPassword(
@@ -201,6 +203,10 @@ const changeUserPassword = async (
 };
 
 const tokenCheck = async (token: string) => {
+  if (!token) {
+    throw new AppError(401, "Session expired!");
+  }
+
   const verifyToken = jwtHelper.verifyToken(
     token,
     config.jwt_reset_token_secret!
