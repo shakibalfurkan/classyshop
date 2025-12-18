@@ -1,6 +1,7 @@
 "use server";
 
 import envConfig from "@/config/envConfig";
+import { getNewAccessToken } from "@/services/AuthService";
 // import { getNewAccessToken } from "@/services/AuthService";
 import axios from "axios";
 import { cookies } from "next/headers";
@@ -31,16 +32,17 @@ axiosInstance.interceptors.response.use(
   },
   async function (error) {
     const config = error.config;
+    const nextCookies = await cookies();
 
     if (error?.response?.status === 401 && !config?.sent) {
       config.sent = true;
 
-      // const res = await getNewAccessToken();
-      // const accessToken = res.data.accessToken;
+      const res = await getNewAccessToken();
+      const accessToken = res.data.accessToken;
 
-      // config.headers["Authorization"] = accessToken;
+      config.headers["Authorization"] = accessToken;
 
-      // cookies().set("accessToken", accessToken);
+      nextCookies.set("accessToken", accessToken);
 
       return axiosInstance(config);
     } else {

@@ -12,7 +12,8 @@ export const auth = (
   ...requiredRoles: (typeof USER_ROLES)[keyof typeof USER_ROLES][]
 ) => {
   return catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-    const token = req.headers.authorization?.split(" ")[1] || req.cookies.token;
+    const token =
+      req.headers.authorization?.split(" ")[1] || req.cookies.accessToken;
 
     if (!token) {
       throw new AppError(401, "You are not authorized!");
@@ -24,7 +25,7 @@ export const auth = (
     ) as JwtPayload;
 
     if (!decodedToken) {
-      throw new AppError(401, "You are not authorized!");
+      throw new AppError(401, "Token expired!");
     }
 
     const { id, email, role } = decodedToken;

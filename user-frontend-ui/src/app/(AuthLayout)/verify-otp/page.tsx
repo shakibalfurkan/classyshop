@@ -6,7 +6,7 @@ import {
   InputOTPGroup,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
-import { useSignupContext } from "@/context/SignupContext";
+import { useSignupContext } from "@/context/signup.provider";
 import { useUserRegistration, useVerifyUser } from "@/hooks/auth.hook";
 import { useOtpCountdown } from "@/hooks/useOtpCountdown";
 import { useRouter, useSearchParams } from "next/navigation";

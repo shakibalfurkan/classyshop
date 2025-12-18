@@ -22,6 +22,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useLoginUser } from "@/hooks/auth.hook";
+import { useUser } from "@/context/user.provider";
 
 type TFormData = {
   email: string;
@@ -31,6 +32,7 @@ type TFormData = {
 
 export default function Login() {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const { setIsUserLoading } = useUser();
 
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -63,6 +65,7 @@ export default function Login() {
       email: data.email,
       password: data.password,
     });
+    setIsUserLoading(true);
   };
 
   useEffect(() => {

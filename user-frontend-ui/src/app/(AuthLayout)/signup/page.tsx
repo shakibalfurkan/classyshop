@@ -19,7 +19,7 @@ import { Controller, set, useForm } from "react-hook-form";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useSignupContext } from "@/context/SignupContext";
+import { useSignupContext } from "@/context/signup.provider";
 import { useUserRegistration } from "@/hooks/auth.hook";
 
 type TFormData = {

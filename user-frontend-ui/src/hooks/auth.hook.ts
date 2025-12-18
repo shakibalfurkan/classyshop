@@ -1,6 +1,7 @@
 import {
   changeUserPassword,
   forgotUserPassword,
+  getUserFromDB,
   loginUser,
   registerUser,
   resetUserPassword,
@@ -92,6 +93,19 @@ export const useTokenCheck = () => {
   return useMutation<any, Error, string>({
     mutationKey: ["TOKEN_CHECK"],
     mutationFn: async (token) => await tokenCheck(token),
+    onSuccess: (data) => {
+      toast.success(data.message);
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
+};
+
+export const useGetUser = () => {
+  return useMutation<any, Error, string>({
+    mutationKey: ["GET_USER"],
+    mutationFn: async () => await getUserFromDB(),
     onSuccess: (data) => {
       toast.success(data.message);
     },

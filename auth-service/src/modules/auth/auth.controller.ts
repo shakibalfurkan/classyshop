@@ -3,6 +3,7 @@ import catchAsync from "../../utils/catchAsync.js";
 import { AuthService } from "./auth.service.js";
 import sendResponse from "../../utils/sendResponse.js";
 
+// user controllers
 const registerUser = catchAsync(async (req: Request, res: Response) => {
   const result = await AuthService.registerUserInToDB(req.body);
   sendResponse(res, {
@@ -76,6 +77,7 @@ const changeUserPassword = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+// common controllers
 const tokenCheck = catchAsync(async (req: Request, res: Response) => {
   const { token } = req.query;
 
@@ -89,6 +91,34 @@ const tokenCheck = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const refreshToken = catchAsync(async (req: Request, res: Response) => {
+  const token =
+    req.headers.authorization?.split(" ")[1] || req.cookies.refreshToken;
+
+  const result = await AuthService.refreshToken(token, res);
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "Token refreshed successfully.",
+    data: result,
+  });
+});
+
+const getUser = catchAsync(async (req: Request, res: Response) => {
+  const email = req.user?.email;
+  const role = req.user?.role;
+
+  const result = await AuthService.getUserFromDB(email!, role!);
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "User retrieved successfully.",
+    data: result,
+  });
+});
+
 export const AuthController = {
   registerUser,
   verifyUser,
@@ -96,5 +126,8 @@ export const AuthController = {
   forgotUserPassword,
   resetUserPassword,
   changeUserPassword,
+
   tokenCheck,
+  refreshToken,
+  getUser,
 };

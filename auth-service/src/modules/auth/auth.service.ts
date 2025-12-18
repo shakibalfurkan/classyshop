@@ -19,6 +19,7 @@ import config from "../../config/index.js";
 import { USER_ROLES } from "../../constant/index.js";
 import { sendEmail } from "../../utils/sendMail.js";
 import type { JwtPayload } from "jsonwebtoken";
+import { setCookie } from "../../utils/cookieHandler.js";
 
 const registerUserInToDB = async (payload: TRegisterPayload) => {
   const { name, email } = payload;
@@ -202,6 +203,7 @@ const changeUserPassword = async (
   return null;
 };
 
+// common services
 const tokenCheck = async (token: string) => {
   if (!token) {
     throw new AppError(401, "Session expired!");
@@ -219,10 +221,58 @@ const tokenCheck = async (token: string) => {
   return null;
 };
 
+const refreshToken = async (token: string, res: Response) => {
+  const decodedToken = jwtHelper.verifyToken(
+    token,
+    config.jwt_refresh_token_secret!
+  ) as JwtPayload;
+
+  if (
+    !decodedToken ||
+    !decodedToken.id ||
+    !decodedToken.email ||
+    !decodedToken.role
+  ) {
+    throw new AppError(401, "You are not authorized!");
+  }
+
+  const user = await User.findOne({ email: decodedToken.email });
+
+  if (!user) {
+    throw new AppError(401, "You are not authorized!");
+  }
+
+  const newAccessToken = jwtHelper.createToken(
+    {
+      id: user._id.toString(),
+      email: user.email,
+      role: USER_ROLES.USER,
+    },
+    config.jwt_access_token_secret as string,
+    config.jwt_access_token_expires_in as string
+  );
+
+  if (decodedToken.role === !USER_ROLES.USER) {
+    setCookie(res, "accessToken", newAccessToken);
+  }
+
+  return { accessToken: newAccessToken };
+};
+
+const getUserFromDB = async (email: string, role: string) => {
+  const user = await User.findOne({ email });
+  if (!user) {
+    throw new AppError(400, "User does not exist!");
+  }
+  return user;
+};
+
 export const AuthService = {
   registerUserInToDB,
   verifyUser,
   loginUser,
+  refreshToken,
+  getUserFromDB,
   forgotUserPassword,
   resetUserPassword,
   changeUserPassword,

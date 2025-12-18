@@ -7,6 +7,7 @@ import { USER_ROLES } from "../../constant/index.js";
 
 const router = Router();
 
+// user routes
 router.post(
   "/user/register",
   validateRequest(AuthValidation.userRegistrationSchema),
@@ -44,6 +45,15 @@ router.patch(
   AuthController.resetUserPassword
 );
 
+// common routes
 router.post("/token-check", AuthController.tokenCheck);
+
+router.post("/refresh-token", AuthController.refreshToken);
+
+router.get(
+  "/me",
+  auth(USER_ROLES.USER, USER_ROLES.SELLER, USER_ROLES.ADMIN),
+  AuthController.getUser
+);
 
 export const AuthRoutes: Router = router;
