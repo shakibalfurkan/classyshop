@@ -24,10 +24,6 @@ export const auth = (
       config.jwt_access_token_secret!
     ) as JwtPayload;
 
-    if (!decodedToken) {
-      throw new AppError(401, "Token expired!");
-    }
-
     const { id, email, role } = decodedToken;
 
     const user =

@@ -93,7 +93,8 @@ const tokenCheck = catchAsync(async (req: Request, res: Response) => {
 
 const refreshToken = catchAsync(async (req: Request, res: Response) => {
   const token =
-    req.headers.authorization?.split(" ")[1] || req.cookies.refreshToken;
+    req.cookies.refreshToken ??
+    (req.headers.cookies as string)?.split("refreshToken=")[1];
 
   const result = await AuthService.refreshToken(token, res);
 

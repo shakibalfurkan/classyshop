@@ -2,12 +2,12 @@
 
 import envConfig from "@/config/envConfig";
 import { getNewAccessToken } from "@/services/AuthService";
-// import { getNewAccessToken } from "@/services/AuthService";
 import axios from "axios";
 import { cookies } from "next/headers";
 
 const axiosInstance = axios.create({
   baseURL: envConfig.baseApi,
+  withCredentials: true,
 });
 
 axiosInstance.interceptors.request.use(
@@ -34,7 +34,11 @@ axiosInstance.interceptors.response.use(
     const config = error.config;
     const nextCookies = await cookies();
 
-    if (error?.response?.status === 401 && !config?.sent) {
+    if (
+      error?.response?.status === 401 &&
+      error?.response?.data?.message === "jwt expired" &&
+      !config?.sent
+    ) {
       config.sent = true;
 
       const res = await getNewAccessToken();

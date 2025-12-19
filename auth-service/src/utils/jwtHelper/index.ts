@@ -1,4 +1,5 @@
 import jwt from "jsonwebtoken";
+import AppError from "../../errors/AppError.js";
 
 export const createToken = (
   jwtPayload: {
@@ -15,8 +16,12 @@ export const createToken = (
 };
 
 const verifyToken = (token: string, secret: string) => {
-  const decoded = jwt.verify(token, secret);
-  return decoded;
+  try {
+    const decoded = jwt.verify(token, secret);
+    return decoded;
+  } catch (error: any) {
+    throw new AppError(401, error.message);
+  }
 };
 
 export const jwtHelper = {
