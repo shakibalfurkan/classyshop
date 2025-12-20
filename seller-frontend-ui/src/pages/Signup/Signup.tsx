@@ -1,7 +1,6 @@
 "use client";
 
-import GoogleLogin from "@/components/shared/auth/GoogleLogin";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+// import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import {
   Field,
@@ -10,40 +9,32 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { SeparatorWithText } from "@/components/ui/separator";
 import { signupSchema } from "@/schemas/auth.schema";
-import { AlertCircleIcon } from "lucide-react";
-import Link from "next/link";
-import { useEffect, useState } from "react";
-import { Controller, set, useForm } from "react-hook-form";
+// import { AlertCircleIcon } from "lucide-react";
+import { useState } from "react";
+import { Controller, useForm } from "react-hook-form";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useSignupContext } from "@/context/signup.provider";
-import { useUserRegistration } from "@/hooks/auth.hook";
+import { Link } from "react-router";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import countries from "@/data/countries";
 
 type TFormData = {
   name: string;
   email: string;
+  phoneNumber: string;
+  country: string;
   password: string;
 };
 
 export default function Signup() {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-
-  const redirect = useSearchParams().get("redirect");
-  const router = useRouter();
-
-  const { setSignupData } = useSignupContext();
-
-  const {
-    mutate: registerUser,
-    data: userData,
-    isSuccess,
-    isPending,
-    isError,
-    error,
-  } = useUserRegistration();
 
   const {
     handleSubmit,
@@ -54,37 +45,24 @@ export default function Signup() {
     defaultValues: {
       name: "",
       email: "",
+      phoneNumber: "",
+      country: "",
       password: "",
     },
   });
 
   const onSubmit = (data: TFormData) => {
-    registerUser(data);
-    setSignupData(data);
+    console.log(data);
   };
-
-  useEffect(() => {
-    if (!isPending && isSuccess) {
-      const verifyOtpUrl = redirect
-        ? `/verify-otp?redirect=${redirect}`
-        : "/verify-otp";
-      router.push(verifyOtpUrl);
-    }
-  }, [isPending, isSuccess, redirect, router]);
 
   return (
     <section className="max-w-7xl mx-auto p-4">
       <div className="flex flex-col items-center justify-center min-h-[87vh] w-full gap-8 ">
         <div className="text-center">
-          <h1 className="text-3xl font-semibold mt-2.5 mb-4">
-            Sign Up your account
-          </h1>
-          <p className="font-medium text-gray-500">
-            To use ClassyShop, Please enter your details.
-          </p>
+          <h1 className="text-3xl font-semibold mt-2.5">Create your account</h1>
         </div>
         <div className="w-full max-w-md border rounded-lg p-6  shadow-sm">
-          {isError && (
+          {/* {isError && (
             <Alert
               variant="destructive"
               className="mb-5 border-red-500 bg-red-50"
@@ -95,7 +73,7 @@ export default function Signup() {
                 <p>{error?.message}</p>
               </AlertDescription>
             </Alert>
-          )}
+          )} */}
           <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
             <FieldGroup>
               <Controller
@@ -117,6 +95,7 @@ export default function Signup() {
                   </Field>
                 )}
               />
+
               <Controller
                 name="email"
                 control={control}
@@ -136,7 +115,57 @@ export default function Signup() {
                   </Field>
                 )}
               />
-
+              <Controller
+                name="phoneNumber"
+                control={control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor="phoneNumber">Phone Number</FieldLabel>
+                    <Input
+                      {...field}
+                      id="phoneNumber"
+                      type="tel"
+                      aria-invalid={fieldState.invalid}
+                      placeholder="+8801XXXXXXXXX"
+                    />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
+              <Controller
+                name="country"
+                control={control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor="country">Country</FieldLabel>
+                    <Select
+                      {...field}
+                      name={field.name}
+                      value={field.value}
+                      onValueChange={field.onChange}
+                    >
+                      <SelectTrigger
+                        className="w-70"
+                        aria-invalid={fieldState.invalid}
+                      >
+                        <SelectValue placeholder="Select a country" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {countries.map((country) => (
+                          <SelectItem key={country.code} value={country.code}>
+                            {country.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
               <div className="relative">
                 <Controller
                   name="password"
@@ -168,29 +197,20 @@ export default function Signup() {
               </div>
             </FieldGroup>
 
-            <Button
-              disabled={isPending}
-              type="submit"
-              className="w-full hover:cursor-pointer"
-            >
-              {isPending ? "Signing Up..." : "Sign Up"}
+            <Button type="submit" className="w-full hover:cursor-pointer">
+              Sign Up
             </Button>
           </form>
-          <div className="flex items-center justify-center gap-2 mt-3 mb-5">
+          <div className="flex items-center justify-center gap-2 mt-3">
             <span className="text-sm font-medium text-gray-500">
               Already have an account?
             </span>
             <Link
-              href="/login"
+              to="/login"
               className="font-medium text-primary text-sm hover:underline"
             >
               Sign In
             </Link>
-          </div>
-          <SeparatorWithText>Or continue with</SeparatorWithText>
-
-          <div className="flex justify-center mt-4">
-            <GoogleLogin />
           </div>
         </div>
       </div>

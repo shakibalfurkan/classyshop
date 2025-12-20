@@ -3,8 +3,8 @@ import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema } from "@/schemas/auth.schema";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { AlertCircleIcon } from "lucide-react";
+// import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+// import { AlertCircleIcon } from "lucide-react";
 import {
   Field,
   FieldError,
@@ -167,7 +167,7 @@ export default function Login() {
               Sign In
             </Button>
           </form>
-          <div className="flex items-center justify-center gap-2 mt-3 mb-5">
+          <div className="flex items-center justify-center gap-2 mt-3">
             <span className="text-sm font-medium text-gray-500">
               Don&apos;t have an account?
             </span>
