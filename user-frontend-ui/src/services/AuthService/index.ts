@@ -9,7 +9,7 @@ import { jwtDecode } from "jwt-decode";
 export const registerUser = async (userData: FieldValues) => {
   try {
     const { data } = await axiosInstance.post(
-      "/api/v1/user/register",
+      "/auth/api/v1/user/register",
       userData
     );
     return data;
@@ -28,7 +28,10 @@ export const registerUser = async (userData: FieldValues) => {
 
 export const verifyUser = async (userData: FieldValues) => {
   try {
-    const { data } = await axiosInstance.post("/api/v1/user/verify", userData);
+    const { data } = await axiosInstance.post(
+      "/auth/api/v1/user/verify",
+      userData
+    );
     return data;
   } catch (error) {
     if (isAxiosError(error)) {
@@ -47,7 +50,10 @@ export const verifyUser = async (userData: FieldValues) => {
 export const loginUser = async (userData: FieldValues) => {
   const nextCookies = await cookies();
   try {
-    const { data } = await axiosInstance.post("/api/v1/user/login", userData);
+    const { data } = await axiosInstance.post(
+      "/auth/api/v1/user/login",
+      userData
+    );
     if (data.success) {
       nextCookies.set("accessToken", data?.data?.token?.accessToken);
       nextCookies.set("refreshToken", data?.data?.token?.refreshToken);
@@ -77,7 +83,7 @@ export const logout = async () => {
 export const forgotUserPassword = async (userData: FieldValues) => {
   try {
     const { data } = await axiosInstance.post(
-      "/api/v1/user/forgot-password",
+      "/auth/api/v1/user/forgot-password",
       userData
     );
 
@@ -98,7 +104,7 @@ export const forgotUserPassword = async (userData: FieldValues) => {
 export const resetUserPassword = async (userData: FieldValues) => {
   try {
     const { data } = await axiosInstance.post(
-      "/api/v1/user/reset-password",
+      "/auth/api/v1/user/reset-password",
       userData
     );
 
@@ -119,7 +125,7 @@ export const resetUserPassword = async (userData: FieldValues) => {
 export const changeUserPassword = async (userData: FieldValues) => {
   try {
     const { data } = await axiosInstance.post(
-      "/api/v1/user/change-password",
+      "/auth/api/v1/user/change-password",
       userData
     );
 
@@ -141,7 +147,7 @@ export const changeUserPassword = async (userData: FieldValues) => {
 export const tokenCheck = async (token: string) => {
   try {
     const { data } = await axiosInstance.post(
-      `/api/v1/token-check?token=${token}`
+      `/auth/api/v1/token-check?token=${token}`
     );
     return data;
   } catch (error) {
@@ -164,7 +170,7 @@ export const getNewAccessToken = async () => {
     const refreshToken = nextCookies.get("refreshToken")?.value;
 
     const res = await axiosInstance({
-      url: "/api/v1/refresh-token",
+      url: "/auth/api/v1/refresh-token",
       method: "POST",
       withCredentials: true,
       headers: {
@@ -208,7 +214,7 @@ export const getLocalUser = async () => {
 
 export const getUserFromDB = async () => {
   try {
-    const { data } = await axiosInstance.get(`/api/v1/me`);
+    const { data } = await axiosInstance.get(`/auth/api/v1/me`);
     return data;
   } catch (error) {
     if (isAxiosError(error)) {

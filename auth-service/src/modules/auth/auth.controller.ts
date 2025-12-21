@@ -120,6 +120,41 @@ const getUser = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const registerSeller = catchAsync(async (req: Request, res: Response) => {
+  const { name, email } = req.body;
+
+  const result = await AuthService.registerSellerInDB(name, email);
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "OTP sent to the email. Please verify to complete registration.",
+    data: result,
+  });
+});
+
+const verifySeller = catchAsync(async (req: Request, res: Response) => {
+  const result = await AuthService.verifyUser(req.body);
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "Seller registered successfully.",
+    data: result,
+  });
+});
+
+const createShop = catchAsync(async (req: Request, res: Response) => {
+  const result = await AuthService.createShopIntoDB(req.body);
+
+  sendResponse(res, {
+    statusCode: 201,
+    success: true,
+    message: "Shop created successfully.",
+    data: result,
+  });
+});
+
 export const AuthController = {
   registerUser,
   verifyUser,
@@ -131,4 +166,9 @@ export const AuthController = {
   tokenCheck,
   refreshToken,
   getUser,
+
+  registerSeller,
+  verifySeller,
+
+  createShop,
 };

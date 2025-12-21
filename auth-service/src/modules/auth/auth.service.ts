@@ -20,6 +20,8 @@ import { USER_ROLES } from "../../constant/index.js";
 import { sendEmail } from "../../utils/sendMail.js";
 import type { JwtPayload } from "jsonwebtoken";
 import { setCookie } from "../../utils/cookieHandler.js";
+import Seller from "../seller/seller.model.js";
+import Shop from "../shop/shop.model.js";
 
 const registerUserInToDB = async (payload: TRegisterPayload) => {
   const { name, email } = payload;
@@ -32,14 +34,17 @@ const registerUserInToDB = async (payload: TRegisterPayload) => {
 
   await checkOtpRestrictions(email);
   await trackOtpRequests(email);
-  await sendOtp(name as string, email, "user_email_verification");
+  await sendOtp(name as string, email, "email_verification");
 
   return null;
 };
 
 const verifyUser = async (payload: TUserVerificationPayload) => {
   const { name, email, password, otp } = payload;
-  console.log(payload);
+
+  if (!name || !email || !password || !otp) {
+    throw new AppError(400, "All fields are required!");
+  }
 
   const isUserExist = await User.findOne({ email });
 
@@ -267,14 +272,100 @@ const getUserFromDB = async (email: string, role: string) => {
   return user;
 };
 
+// seller routes
+const registerSellerInDB = async (name: string, email: string) => {
+  const isSellerExist = await Seller.findOne({ email });
+
+  if (isSellerExist) {
+    throw new AppError(400, "Seller already exists with this email!");
+  }
+
+  await checkOtpRestrictions(email);
+  await trackOtpRequests(email);
+  await sendOtp(name, email, "email_verification");
+  return null;
+};
+const verifySeller = async (payload: {
+  name: string;
+  email: string;
+  phoneNumber: string;
+  country: string;
+  password: string;
+  otp: string;
+}) => {
+  const { name, email, phoneNumber, country, password, otp } = payload;
+
+  if (!name || !email || !phoneNumber || !country || !password || !otp) {
+    throw new AppError(400, "All fields are required!");
+  }
+
+  const isExistingSeller = await Seller.findOne({ email });
+
+  if (isExistingSeller) {
+    throw new AppError(400, "Seller already exists with this email!");
+  }
+
+  await verifyOtp(email, otp);
+
+  await Seller.create({
+    name,
+    email,
+    phoneNumber,
+    country,
+    password,
+  });
+
+  return null;
+};
+
+// create shop
+const createShopIntoDB = async (payload: {
+  name: string;
+  bio: string;
+  address: string;
+  openingHours: string;
+  website: string;
+  category: string;
+  sellerId: string;
+}) => {
+  const { name, bio, address, openingHours, website, category, sellerId } =
+    payload;
+  if (!name || !bio || !address || !openingHours || !category || !sellerId) {
+    throw new AppError(400, "All fields are required!");
+  }
+
+  const shopData: any = {
+    name,
+    bio,
+    address,
+    openingHours,
+    category,
+    sellerId,
+  };
+
+  if (website && website.trim() !== "") {
+    shopData.website = website;
+  }
+
+  const shop = await Shop.create(shopData);
+
+  return shop;
+};
+
 export const AuthService = {
   registerUserInToDB,
   verifyUser,
   loginUser,
-  refreshToken,
-  getUserFromDB,
   forgotUserPassword,
   resetUserPassword,
   changeUserPassword,
+
   tokenCheck,
+  refreshToken,
+  getUserFromDB,
+
+  registerSellerInDB,
+  verifySeller,
+
+  createShopIntoDB,
 };

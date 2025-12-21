@@ -56,4 +56,23 @@ router.get(
   AuthController.getUser
 );
 
+// seller routes
+router.post(
+  "/seller/register",
+  validateRequest(AuthValidation.sellerRegistrationSchema),
+  AuthController.registerSeller
+);
+router.post(
+  "/seller/verify",
+  validateRequest(AuthValidation.sellerVerificationSchema),
+  AuthController.verifySeller
+);
+
+router.post(
+  "/seller/create-shop",
+  auth(USER_ROLES.SELLER),
+  validateRequest(AuthValidation.createShopValidationSchema),
+  AuthController.createShop
+);
+
 export const AuthRoutes: Router = router;

@@ -7,6 +7,7 @@ import type { JwtPayload } from "jsonwebtoken";
 import { USER_ROLES } from "../constant/index.js";
 import User from "../modules/user/user.model.js";
 import { AuthError } from "../errors/authError.js";
+import Seller from "../modules/seller/seller.model.js";
 
 export const auth = (
   ...requiredRoles: (typeof USER_ROLES)[keyof typeof USER_ROLES][]
@@ -27,7 +28,11 @@ export const auth = (
     const { id, email, role } = decodedToken;
 
     const user =
-      role === USER_ROLES.USER ? await User.findOne({ email }) : null;
+      role === USER_ROLES.USER
+        ? await User.findOne({ email })
+        : role === USER_ROLES.SELLER
+        ? await Seller.findOne({ email })
+        : null;
 
     if (!user) {
       throw new AppError(401, "You are not authorized!");
