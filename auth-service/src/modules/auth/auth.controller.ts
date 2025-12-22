@@ -134,7 +134,7 @@ const registerSeller = catchAsync(async (req: Request, res: Response) => {
 });
 
 const verifySeller = catchAsync(async (req: Request, res: Response) => {
-  const result = await AuthService.verifyUser(req.body);
+  const result = await AuthService.verifySeller(req.body);
 
   sendResponse(res, {
     statusCode: 200,

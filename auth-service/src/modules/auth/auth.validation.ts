@@ -50,10 +50,10 @@ const userVerificationSchema = z.object({
       .min(8, { error: "Password must be 8 characters long" })
       .max(20, { error: "Password must be less than 20 characters" })
       .trim(),
-  }),
-  otp: z.string({
-    error: (issue) =>
-      issue.input === undefined ? "OTP is required" : "OTP must be a string",
+    otp: z.string({
+      error: (issue) =>
+        issue.input === undefined ? "OTP is required" : "OTP must be a string",
+    }),
   }),
 });
 
@@ -199,10 +199,10 @@ const sellerVerificationSchema = z.object({
       .min(8, { error: "Password must be 8 characters long" })
       .max(20, { error: "Password must be less than 20 characters" })
       .trim(),
-  }),
-  otp: z.string({
-    error: (issue) =>
-      issue.input === undefined ? "OTP is required" : "OTP must be a string",
+    otp: z.string({
+      error: (issue) =>
+        issue.input === undefined ? "OTP is required" : "OTP must be a string",
+    }),
   }),
 });
 

@@ -11,11 +11,11 @@ import {
 import { Input } from "@/components/ui/input";
 import { signupSchema } from "@/schemas/auth.schema";
 // import { AlertCircleIcon } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import {
   Select,
   SelectContent,
@@ -24,6 +24,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import countries from "@/data/countries";
+import { useSignupMutation } from "@/redux/features/auth/authApi";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { AlertCircleIcon } from "lucide-react";
+import { toast } from "sonner";
 
 type TFormData = {
   name: string;
@@ -35,7 +39,12 @@ type TFormData = {
 
 export default function Signup() {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const navigate = useNavigate();
 
+  const [signup, { data: sellerData, isError, isSuccess, isLoading }] =
+    useSignupMutation();
+
+  console.log(sellerData);
   const {
     handleSubmit,
     control,
@@ -52,8 +61,22 @@ export default function Signup() {
   });
 
   const onSubmit = (data: TFormData) => {
-    console.log(data);
+    signup({ name: data.name, email: data.email });
+    sessionStorage.setItem("signupData", JSON.stringify(data));
   };
+
+  useEffect(() => {
+    if (!isLoading && isSuccess && sellerData?.success) {
+      toast.success(sellerData?.message);
+      navigate("/verify-otp");
+    }
+  }, [
+    isLoading,
+    navigate,
+    isSuccess,
+    sellerData?.message,
+    sellerData?.success,
+  ]);
 
   return (
     <section className="max-w-7xl mx-auto p-4">
@@ -62,7 +85,7 @@ export default function Signup() {
           <h1 className="text-3xl font-semibold mt-2.5">Create your account</h1>
         </div>
         <div className="w-full max-w-md border rounded-lg p-6  shadow-sm">
-          {/* {isError && (
+          {isError && (
             <Alert
               variant="destructive"
               className="mb-5 border-red-500 bg-red-50"
@@ -70,10 +93,10 @@ export default function Signup() {
               <AlertCircleIcon />
               <AlertTitle>Unable to sing up.</AlertTitle>
               <AlertDescription>
-                <p>{error?.message}</p>
+                <p>{sellerData?.message}</p>
               </AlertDescription>
             </Alert>
-          )} */}
+          )}
           <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
             <FieldGroup>
               <Controller
@@ -198,7 +221,7 @@ export default function Signup() {
             </FieldGroup>
 
             <Button type="submit" className="w-full hover:cursor-pointer">
-              Sign Up
+              {isLoading ? "Signing Up..." : "Sign Up"}
             </Button>
           </form>
           <div className="flex items-center justify-center gap-2 mt-3">

@@ -5,7 +5,7 @@ export type TSeller = {
   phoneNumber: string;
   country: string;
   password: string;
-  stripeId: string;
+  stripeId?: string;
   createdAt: Date;
   updatedAt: Date;
 };

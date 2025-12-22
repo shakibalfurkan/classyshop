@@ -8,16 +8,78 @@ import {
 } from "@/components/ui/input-otp";
 
 import { useOtpCountdown } from "@/hooks/useOtpCountdown";
+import {
+  useSignupMutation,
+  useVerifySellerMutation,
+} from "@/redux/features/auth/authApi";
 
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
+import { toast } from "sonner";
 
 export default function VerifyOTP() {
   const [otpValue, setOtpValue] = useState("");
+  const navigate = useNavigate();
+
   const { isActive, timeLeft, start } = useOtpCountdown();
+  const storedSignupData = JSON.parse(
+    sessionStorage.getItem("signupData") as string
+  );
 
-  const handleVerifyOtp = () => {};
+  const [
+    verifySeller,
+    { data: sellerData, isError, error, isSuccess: isVerifySuccess, isLoading },
+  ] = useVerifySellerMutation();
 
-  const handleResendOtp = () => {};
+  console.log(error);
+
+  const [
+    signup,
+    {
+      data: sellerRegisterData,
+      isSuccess: isRegisterSuccess,
+      isError: isRegisterError,
+    },
+  ] = useSignupMutation();
+
+  const handleVerifyOtp = () => {
+    verifySeller({ ...storedSignupData, otp: otpValue });
+  };
+
+  useEffect(() => {
+    if (!isLoading && isVerifySuccess) {
+      sessionStorage.removeItem("signupData");
+    }
+
+    if (!isLoading && isVerifySuccess && sellerData?.success) {
+      toast.success(sellerData?.message);
+      navigate("/login");
+    }
+
+    if (!isLoading && isError && !sellerData?.success) {
+      toast.error(sellerData?.message);
+    }
+  }, [
+    isError,
+    isLoading,
+    isVerifySuccess,
+    navigate,
+    sellerData?.message,
+    sellerData?.success,
+  ]);
+
+  const handleResendOtp = () => {
+    signup({ name: storedSignupData.name, email: storedSignupData.email });
+    if (isRegisterError) {
+      toast.error(sellerRegisterData?.message);
+    }
+  };
+
+  useEffect(() => {
+    if (isRegisterSuccess) {
+      start();
+    }
+  }, [isRegisterSuccess, start]);
 
   useEffect(() => {
     start();
@@ -53,7 +115,7 @@ export default function VerifyOTP() {
             onClick={() => handleVerifyOtp()}
             className="w-full cursor-pointer"
           >
-            Verify OTP
+            {isLoading ? "Verifying..." : "Verify OTP"}
           </Button>
         </div>
         <div className="mt-4 text-center space-y-1">

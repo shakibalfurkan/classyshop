@@ -32,7 +32,7 @@ const sellerSchema = new Schema<TSeller>(
     },
     stripeId: {
       type: String,
-      required: true,
+      default: null,
     },
   },
   {
