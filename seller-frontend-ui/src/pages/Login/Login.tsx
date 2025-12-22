@@ -16,6 +16,7 @@ import { Input } from "@/components/ui/input";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Link } from "react-router";
+import { useLoginMutation } from "@/redux/features/auth/authApi";
 
 type TFormData = {
   email: string;
@@ -25,6 +26,8 @@ type TFormData = {
 
 export default function Login() {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [login, { data: sellerData, isError, isSuccess, isLoading }] =
+    useLoginMutation();
 
   const {
     handleSubmit,

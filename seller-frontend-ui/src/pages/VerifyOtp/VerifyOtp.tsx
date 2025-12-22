@@ -28,10 +28,8 @@ export default function VerifyOTP() {
 
   const [
     verifySeller,
-    { data: sellerData, isError, error, isSuccess: isVerifySuccess, isLoading },
+    { data: sellerData, isError, isSuccess: isVerifySuccess, isLoading },
   ] = useVerifySellerMutation();
-
-  console.log(error);
 
   const [
     signup,
