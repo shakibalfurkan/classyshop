@@ -68,16 +68,16 @@ export default function VerifyOTP() {
 
   const handleResendOtp = () => {
     signup({ name: storedSignupData.name, email: storedSignupData.email });
-    if (isRegisterError) {
-      toast.error(sellerRegisterData?.message);
-    }
   };
 
   useEffect(() => {
     if (isRegisterSuccess) {
       start();
     }
-  }, [isRegisterSuccess, start]);
+    if (isRegisterError) {
+      toast.error(sellerRegisterData?.message);
+    }
+  }, [isRegisterSuccess, start, isRegisterError, sellerRegisterData?.message]);
 
   useEffect(() => {
     start();

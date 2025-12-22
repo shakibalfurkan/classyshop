@@ -22,6 +22,7 @@ import type { JwtPayload } from "jsonwebtoken";
 import { setCookie } from "../../utils/cookieHandler.js";
 import Seller from "../seller/seller.model.js";
 import Shop from "../shop/shop.model.js";
+import type { TSeller } from "../seller/seller.interface.js";
 
 const registerUserInToDB = async (payload: TRegisterPayload) => {
   const { name, email } = payload;
@@ -241,7 +242,10 @@ const refreshToken = async (token: string, res: Response) => {
     throw new AppError(401, "You are not authorized!");
   }
 
-  const user = await User.findOne({ email: decodedToken.email });
+  const user =
+    decodedToken?.role === USER_ROLES.USER
+      ? await User.findOne({ email: decodedToken.email })
+      : await Seller.findOne({ email: decodedToken.email });
 
   if (!user) {
     throw new AppError(401, "You are not authorized!");
@@ -251,20 +255,18 @@ const refreshToken = async (token: string, res: Response) => {
     {
       id: user._id.toString(),
       email: user.email,
-      role: USER_ROLES.USER,
+      role: decodedToken.role,
     },
     config.jwt_access_token_secret as string,
     config.jwt_access_token_expires_in as string
   );
 
-  if (decodedToken.role === !USER_ROLES.USER) {
-    setCookie(res, "accessToken", newAccessToken);
-  }
+  setCookie(res, "accessToken", newAccessToken);
 
   return { accessToken: newAccessToken };
 };
 
-const getUserFromDB = async (email: string, role: string) => {
+const getMeFromDB = async (email: string, role: string) => {
   const user = await User.findOne({ email });
   if (!user) {
     throw new AppError(400, "User does not exist!");
@@ -318,6 +320,50 @@ const verifySeller = async (payload: {
   return null;
 };
 
+const loginSeller = async (payload: TLoginPayload, res: Response) => {
+  const { email, password: plainPassword } = payload;
+
+  const seller = await Seller.findOne({ email }).select("+password");
+
+  if (!seller) {
+    throw new AppError(400, "Seller does not exist!");
+  }
+
+  const passwordMatch = await isPasswordMatched(
+    plainPassword,
+    seller?.password as string
+  );
+
+  if (!passwordMatch) {
+    throw new AppError(400, "Invalid credentials!");
+  }
+
+  const jwtPayload = {
+    id: seller._id.toString(),
+    email: seller.email,
+    role: USER_ROLES.SELLER,
+  };
+
+  const accessToken = createToken(
+    jwtPayload,
+    config.jwt_access_token_secret as string,
+    config.jwt_access_token_expires_in as string
+  );
+
+  const refreshToken = createToken(
+    jwtPayload,
+    config.jwt_refresh_token_secret as string,
+    config.jwt_refresh_token_expires_in as string
+  );
+
+  setCookie(res, "accessToken", accessToken);
+  setCookie(res, "refreshToken", refreshToken);
+
+  const { password, ...sellerData } = seller.toObject();
+
+  return { seller: sellerData };
+};
+
 // create shop
 const createShopIntoDB = async (payload: {
   name: string;
@@ -362,10 +408,11 @@ export const AuthService = {
 
   tokenCheck,
   refreshToken,
-  getUserFromDB,
+  getMeFromDB,
 
   registerSellerInDB,
   verifySeller,
+  loginSeller,
 
   createShopIntoDB,
 };

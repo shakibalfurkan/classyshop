@@ -11,10 +11,12 @@ export const router: ReturnType<typeof createBrowserRouter> =
     {
       path: "/",
       element: <App />,
-      children: [{ index: true, element: <Home /> }],
+      children: [
+        { index: true, element: <Home /> },
+        { path: "/create-shop", element: <CreateShop /> },
+      ],
     },
     { path: "/login", element: <Login /> },
     { path: "/signup", element: <Signup /> },
     { path: "/verify-otp", element: <VerifyOTP /> },
-    { path: "/create-shop", element: <CreateShop /> },
   ]);

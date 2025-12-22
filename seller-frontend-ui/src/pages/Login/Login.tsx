@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema } from "@/schemas/auth.schema";
@@ -15,8 +15,11 @@ import {
 import { Input } from "@/components/ui/input";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { useLoginMutation } from "@/redux/features/auth/authApi";
+import { toast } from "sonner";
+import { useAppDispatch } from "@/redux/hook";
+import { setSeller } from "@/redux/features/auth/authSlice";
 
 type TFormData = {
   email: string;
@@ -26,6 +29,9 @@ type TFormData = {
 
 export default function Login() {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+
   const [login, { data: sellerData, isError, isSuccess, isLoading }] =
     useLoginMutation();
 
@@ -43,8 +49,20 @@ export default function Login() {
   });
 
   const onSubmit = (data: TFormData) => {
-    console.log(data);
+    login({ email: data.email, password: data.password });
   };
+
+  useEffect(() => {
+    if (!isLoading && isSuccess && sellerData?.success) {
+      dispatch(setSeller(sellerData.data));
+      toast.success(sellerData?.message);
+      navigate("/create-shop");
+    }
+
+    if (!isLoading && isError && !sellerData?.success) {
+      toast.error(sellerData?.message);
+    }
+  }, [isError, isLoading, navigate, sellerData, isSuccess, dispatch]);
 
   return (
     <section className="max-w-7xl mx-auto p-4">
@@ -167,7 +185,7 @@ export default function Login() {
             </FieldGroup>
 
             <Button type="submit" className="w-full hover:cursor-pointer">
-              Sign In
+              {isLoading ? "Signing In..." : "Sign In"}
             </Button>
           </form>
           <div className="flex items-center justify-center gap-2 mt-3">

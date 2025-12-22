@@ -57,7 +57,7 @@ const userVerificationSchema = z.object({
   }),
 });
 
-const userLoginSchema = z.object({
+const loginValidationSchema = z.object({
   body: z.object({
     email: z
       .email({
@@ -252,7 +252,7 @@ const createShopValidationSchema = z.object({
 export const AuthValidation = {
   userRegistrationSchema,
   userVerificationSchema,
-  userLoginSchema,
+  loginValidationSchema,
   forgotPasswordSchema,
   resetUserPasswordSchema,
   changeUserPasswordSchema,

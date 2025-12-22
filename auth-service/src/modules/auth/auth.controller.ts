@@ -106,11 +106,11 @@ const refreshToken = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-const getUser = catchAsync(async (req: Request, res: Response) => {
+const getMe = catchAsync(async (req: Request, res: Response) => {
   const email = req.user?.email;
   const role = req.user?.role;
 
-  const result = await AuthService.getUserFromDB(email!, role!);
+  const result = await AuthService.getMeFromDB(email!, role!);
 
   sendResponse(res, {
     statusCode: 200,
@@ -144,6 +144,17 @@ const verifySeller = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const loginSeller = catchAsync(async (req: Request, res: Response) => {
+  const result = await AuthService.loginSeller(req.body, res);
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "Seller logged in successfully.",
+    data: result,
+  });
+});
+
 const createShop = catchAsync(async (req: Request, res: Response) => {
   const result = await AuthService.createShopIntoDB(req.body);
 
@@ -165,10 +176,11 @@ export const AuthController = {
 
   tokenCheck,
   refreshToken,
-  getUser,
+  getMe,
 
   registerSeller,
   verifySeller,
+  loginSeller,
 
   createShop,
 };

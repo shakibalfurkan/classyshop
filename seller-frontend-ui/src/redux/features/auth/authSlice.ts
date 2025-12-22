@@ -4,23 +4,22 @@ export type TSeller = {
   _id: string;
   name: string;
   email: string;
-  bio: string;
   phoneNumber: string;
   country: string;
   password: string;
-  stripeId: string;
+  stripeId?: string;
   createdAt: Date;
   updatedAt: Date;
 };
 
 type TAuthState = {
   seller: TSeller | null;
-  isUserLoading: boolean;
+  isSellerLoading: boolean;
 };
 
 const initialState: TAuthState = {
   seller: null,
-  isUserLoading: true,
+  isSellerLoading: true,
 };
 
 const authSlice = createSlice({
@@ -30,18 +29,18 @@ const authSlice = createSlice({
     setSeller: (state, action) => {
       const seller = action.payload;
       state.seller = seller;
-      state.isUserLoading = false;
+      state.isSellerLoading = false;
     },
     logout: (state) => {
       state.seller = null;
-      state.isUserLoading = false;
+      state.isSellerLoading = false;
     },
-    setIsUserLoading: (state, action) => {
-      state.isUserLoading = action.payload;
+    setIsSellerLoading: (state, action) => {
+      state.isSellerLoading = action.payload;
     },
   },
 });
 
-export const { setSeller, setIsUserLoading, logout } = authSlice.actions;
+export const { setSeller, setIsSellerLoading, logout } = authSlice.actions;
 
 export default authSlice.reducer;

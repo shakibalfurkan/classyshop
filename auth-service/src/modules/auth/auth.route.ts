@@ -22,7 +22,7 @@ router.post(
 
 router.post(
   "/user/login",
-  validateRequest(AuthValidation.userLoginSchema),
+  validateRequest(AuthValidation.loginValidationSchema),
   AuthController.loginUser
 );
 
@@ -53,7 +53,7 @@ router.post("/refresh-token", AuthController.refreshToken);
 router.get(
   "/me",
   auth(USER_ROLES.USER, USER_ROLES.SELLER, USER_ROLES.ADMIN),
-  AuthController.getUser
+  AuthController.getMe
 );
 
 // seller routes
@@ -62,6 +62,13 @@ router.post(
   validateRequest(AuthValidation.sellerRegistrationSchema),
   AuthController.registerSeller
 );
+
+router.post(
+  "/seller/login",
+  validateRequest(AuthValidation.loginValidationSchema),
+  AuthController.loginSeller
+);
+
 router.post(
   "/seller/verify",
   validateRequest(AuthValidation.sellerVerificationSchema),

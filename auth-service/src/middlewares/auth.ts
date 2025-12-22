@@ -16,6 +16,8 @@ export const auth = (
     const token =
       req.headers.authorization?.split(" ")[1] || req.cookies.accessToken;
 
+    console.log({ token });
+
     if (!token) {
       throw new AppError(401, "You are not authorized!");
     }

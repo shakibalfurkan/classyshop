@@ -1,12 +1,9 @@
-import envConfig from "@/config/envConfig";
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { createApi } from "@reduxjs/toolkit/query/react";
+import { baseQueryWithReauth } from "./baseQueryWithReauth";
 
 export const baseApi = createApi({
   reducerPath: "baseApi",
-  baseQuery: fetchBaseQuery({
-    baseUrl: envConfig.baseApi,
-    credentials: "include",
-  }),
+  baseQuery: baseQueryWithReauth,
   tagTypes: [],
   endpoints: () => ({}),
 });
