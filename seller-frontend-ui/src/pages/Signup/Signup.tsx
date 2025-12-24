@@ -1,6 +1,5 @@
 "use client";
 
-// import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import {
   Field,
@@ -10,7 +9,7 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { signupSchema } from "@/schemas/auth.schema";
-// import { AlertCircleIcon } from "lucide-react";
+
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
@@ -23,11 +22,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import countries from "@/data/countries";
+
 import { useSignupMutation } from "@/redux/features/auth/authApi";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircleIcon } from "lucide-react";
 import { toast } from "sonner";
+import { countries } from "@/data";
+import type { TCountry } from "@/types";
 
 type TFormData = {
   name: string;
@@ -44,20 +45,12 @@ export default function Signup() {
   const [signup, { data: sellerData, isError, isSuccess, isLoading }] =
     useSignupMutation();
 
-  console.log(sellerData);
   const {
     handleSubmit,
     control,
     formState: { errors },
   } = useForm<TFormData>({
     resolver: zodResolver(signupSchema),
-    defaultValues: {
-      name: "",
-      email: "",
-      phoneNumber: "",
-      country: "",
-      password: "",
-    },
   });
 
   const onSubmit = (data: TFormData) => {
@@ -176,7 +169,7 @@ export default function Signup() {
                         <SelectValue placeholder="Select a country" />
                       </SelectTrigger>
                       <SelectContent>
-                        {countries.map((country) => (
+                        {countries.map((country: TCountry) => (
                           <SelectItem key={country.code} value={country.code}>
                             {country.name}
                           </SelectItem>

@@ -41,11 +41,6 @@ export default function Login() {
     formState: { errors },
   } = useForm<TFormData>({
     resolver: zodResolver(loginSchema),
-    defaultValues: {
-      email: "",
-      password: "",
-      rememberMe: false,
-    },
   });
 
   const onSubmit = (data: TFormData) => {

@@ -53,11 +53,6 @@ export default function Login() {
     formState: { errors },
   } = useForm<TFormData>({
     resolver: zodResolver(loginSchema),
-    defaultValues: {
-      email: "",
-      password: "",
-      rememberMe: false,
-    },
   });
 
   const onSubmit = (data: TFormData) => {
@@ -76,7 +71,7 @@ export default function Login() {
         router.push("/");
       }
     }
-  }, [isPending, isSuccess, redirect, router]);
+  }, [isSuccess, redirect, router, isPending]);
 
   return (
     <section className="max-w-7xl mx-auto p-4">

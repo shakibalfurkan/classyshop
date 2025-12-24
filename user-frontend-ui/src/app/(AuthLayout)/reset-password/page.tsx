@@ -49,10 +49,6 @@ export default function ResetPassword() {
     formState: { errors },
   } = useForm<TFormData>({
     resolver: zodResolver(resetPasswordSchema),
-    defaultValues: {
-      newPassword: "",
-      confirmNewPassword: "",
-    },
   });
 
   const onSubmit = (data: TFormData) => {

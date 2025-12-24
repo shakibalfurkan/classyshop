@@ -1,14 +1,11 @@
-"use server";
-
-import axiosInstance from "@/lib/AxiosInstance";
 import { isAxiosError } from "axios";
-import { cookies } from "next/headers";
 import { FieldValues } from "react-hook-form";
 import { jwtDecode } from "jwt-decode";
+import axiosClient from "@/lib/Axios/axios-client";
 
 export const registerUser = async (userData: FieldValues) => {
   try {
-    const { data } = await axiosInstance.post(
+    const { data } = await axiosClient.post(
       "/auth/api/v1/user/register",
       userData
     );
@@ -28,7 +25,7 @@ export const registerUser = async (userData: FieldValues) => {
 
 export const verifyUser = async (userData: FieldValues) => {
   try {
-    const { data } = await axiosInstance.post(
+    const { data } = await axiosClient.post(
       "/auth/api/v1/user/verify",
       userData
     );
@@ -48,16 +45,11 @@ export const verifyUser = async (userData: FieldValues) => {
 };
 
 export const loginUser = async (userData: FieldValues) => {
-  const nextCookies = await cookies();
   try {
-    const { data } = await axiosInstance.post(
+    const { data } = await axiosClient.post(
       "/auth/api/v1/user/login",
       userData
     );
-    if (data.success) {
-      nextCookies.set("accessToken", data?.data?.token?.accessToken);
-      nextCookies.set("refreshToken", data?.data?.token?.refreshToken);
-    }
 
     return data;
   } catch (error) {
@@ -74,15 +66,11 @@ export const loginUser = async (userData: FieldValues) => {
   }
 };
 
-export const logout = async () => {
-  const nextCookies = await cookies();
-  nextCookies.delete("accessToken");
-  nextCookies.delete("refreshToken");
-};
+export const logout = async () => {};
 
 export const forgotUserPassword = async (userData: FieldValues) => {
   try {
-    const { data } = await axiosInstance.post(
+    const { data } = await axiosClient.post(
       "/auth/api/v1/user/forgot-password",
       userData
     );
@@ -103,7 +91,7 @@ export const forgotUserPassword = async (userData: FieldValues) => {
 };
 export const resetUserPassword = async (userData: FieldValues) => {
   try {
-    const { data } = await axiosInstance.post(
+    const { data } = await axiosClient.post(
       "/auth/api/v1/user/reset-password",
       userData
     );
@@ -124,7 +112,7 @@ export const resetUserPassword = async (userData: FieldValues) => {
 };
 export const changeUserPassword = async (userData: FieldValues) => {
   try {
-    const { data } = await axiosInstance.post(
+    const { data } = await axiosClient.post(
       "/auth/api/v1/user/change-password",
       userData
     );
@@ -146,7 +134,7 @@ export const changeUserPassword = async (userData: FieldValues) => {
 
 export const tokenCheck = async (token: string) => {
   try {
-    const { data } = await axiosInstance.post(
+    const { data } = await axiosClient.post(
       `/auth/api/v1/token-check?token=${token}`
     );
     return data;
@@ -166,17 +154,7 @@ export const tokenCheck = async (token: string) => {
 
 export const getNewAccessToken = async () => {
   try {
-    const nextCookies = await cookies();
-    const refreshToken = nextCookies.get("refreshToken")?.value;
-
-    const res = await axiosInstance({
-      url: "/auth/api/v1/refresh-token",
-      method: "POST",
-      withCredentials: true,
-      headers: {
-        cookies: `refreshToken=${refreshToken}`,
-      },
-    });
+    const res = await axiosClient.post("/auth/api/v1/refresh-token");
 
     return res.data;
   } catch (error) {
@@ -193,28 +171,9 @@ export const getNewAccessToken = async () => {
   }
 };
 
-export const getLocalUser = async () => {
-  const nextCookies = await cookies();
-  const accessToken = nextCookies.get("accessToken")?.value;
-
-  let decodedToken = null;
-
-  if (accessToken) {
-    decodedToken = await jwtDecode(accessToken);
-
-    return {
-      id: decodedToken.id,
-      email: decodedToken.email,
-      role: decodedToken.role,
-    };
-  }
-
-  return decodedToken;
-};
-
 export const getUserFromDB = async () => {
   try {
-    const { data } = await axiosInstance.get(`/auth/api/v1/me`);
+    const { data } = await axiosClient.get(`/auth/api/v1/me`);
     return data;
   } catch (error) {
     if (isAxiosError(error)) {

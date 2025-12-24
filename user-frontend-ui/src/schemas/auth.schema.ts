@@ -23,7 +23,6 @@ export const signupSchema = z.object({
       error: (issue) =>
         issue.input === undefined ? "Name is required." : "Invalid name.",
     })
-    .min(2, { error: "Name must be 2 characters long" })
     .trim(),
 
   email: z.email({

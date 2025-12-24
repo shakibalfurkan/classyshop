@@ -233,6 +233,8 @@ const refreshToken = async (token: string, res: Response) => {
     config.jwt_refresh_token_secret!
   ) as JwtPayload;
 
+  console.log({ decodedToken });
+
   if (
     !decodedToken ||
     !decodedToken.id ||
