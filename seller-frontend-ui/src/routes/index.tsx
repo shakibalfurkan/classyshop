@@ -5,6 +5,7 @@ import Login from "../pages/Login/Login";
 import Signup from "@/pages/Signup/Signup";
 import VerifyOTP from "@/pages/VerifyOtp/VerifyOtp";
 import CreateShop from "@/pages/CreateShop/CreateShop";
+import Payouts from "@/pages/Payouts/Payouts";
 
 export const router: ReturnType<typeof createBrowserRouter> =
   createBrowserRouter([
@@ -14,6 +15,7 @@ export const router: ReturnType<typeof createBrowserRouter> =
       children: [
         { index: true, element: <Home /> },
         { path: "/create-shop", element: <CreateShop /> },
+        { path: "/payouts", element: <Payouts /> },
       ],
     },
     { path: "/login", element: <Login /> },
