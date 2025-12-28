@@ -1,5 +1,5 @@
 import type { Response } from "express";
-import config from "../config/index.js";
+import config from "../app/config/index.js";
 
 export const setCookie = (
   res: Response,

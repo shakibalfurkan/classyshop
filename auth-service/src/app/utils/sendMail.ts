@@ -1,6 +1,6 @@
 import nodemailer from "nodemailer";
 import ejs from "ejs";
-import config from "../config/index.js";
+import config from "../app/config/index.js";
 import path from "path";
 
 const transporter = nodemailer.createTransport({

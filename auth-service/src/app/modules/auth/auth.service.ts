@@ -6,23 +6,26 @@ import type {
   TRegisterPayload,
   TUserVerificationPayload,
 } from "./auth.interface.js";
-import checkOtpRestrictions from "../../utils/checkOtpRestrictions.js";
-import trackOtpRequests from "../../utils/trackOtpRequests.js";
-import sendOtp from "../../utils/sendOtp.js";
-import verifyOtp from "../../utils/verifyOtp.js";
+import checkOtpRestrictions from "../../../utils/checkOtpRestrictions.js";
+import trackOtpRequests from "../../../utils/trackOtpRequests.js";
+import sendOtp from "../../../utils/sendOtp.js";
+import verifyOtp from "../../../utils/verifyOtp.js";
+
+import { createToken, jwtHelper } from "../../../utils/jwtHelper/index.js";
+import config from "../../config/index.js";
+import { USER_ROLES } from "../../constant/index.js";
+
+import type { JwtPayload } from "jsonwebtoken";
+
+import Seller from "../seller/seller.model.js";
+import Shop from "../shop/shop.model.js";
+import { Stripe } from "stripe";
 import {
   hashPassword,
   isPasswordMatched,
 } from "../../utils/passwordManager.js";
-import { createToken, jwtHelper } from "../../utils/jwtHelper/index.js";
-import config from "../../config/index.js";
-import { USER_ROLES } from "../../constant/index.js";
-import { sendEmail } from "../../utils/sendMail.js";
-import type { JwtPayload } from "jsonwebtoken";
 import { setCookie } from "../../utils/cookieHandler.js";
-import Seller from "../seller/seller.model.js";
-import Shop from "../shop/shop.model.js";
-import { Stripe } from "stripe";
+import { sendEmail } from "../../utils/sendMail.js";
 
 export const stripe = new Stripe(config.stripe_secret_key!, {
   apiVersion: "2025-12-15.clover",
@@ -421,6 +424,8 @@ const createShopIntoDB = async (payload: {
   if (!name || !bio || !address || !openingHours || !category || !sellerId) {
     throw new AppError(400, "All fields are required!");
   }
+
+  throw new AppError(500, "Shop creation is disabled temporarily.");
 
   const shopData: any = {
     name,

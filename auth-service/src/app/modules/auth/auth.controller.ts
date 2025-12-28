@@ -1,4 +1,4 @@
-import type { NextFunction, Request, Response } from "express";
+import type { Request, Response } from "express";
 import catchAsync from "../../utils/catchAsync.js";
 import { AuthService } from "./auth.service.js";
 import sendResponse from "../../utils/sendResponse.js";

@@ -11,7 +11,6 @@ import { Input } from "@/components/ui/input";
 
 import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "react-router";
 import {
@@ -28,6 +27,9 @@ import { toast } from "sonner";
 import { createShopSchema } from "@/schemas/shop.schema";
 import { shopCategories } from "@/data";
 import type { TShopCategory } from "@/types";
+import { useCreateShopMutation } from "@/redux/features/shop/shopApi";
+import { useAppDispatch } from "@/redux/hook";
+import { setSeller } from "@/redux/features/auth/authSlice";
 
 type TFormData = {
   name: string;
@@ -38,8 +40,15 @@ type TFormData = {
   category: string;
 };
 
+type TErrorResponse = {
+  message: string;
+};
+
 export default function CreateShop() {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const [createShop, { data: shopData, isLoading, isSuccess, isError, error }] =
+    useCreateShopMutation();
 
   const {
     handleSubmit,
@@ -50,10 +59,16 @@ export default function CreateShop() {
   });
 
   const onSubmit = (data: TFormData) => {
-    console.log(data);
+    createShop(data);
   };
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    if (!isLoading && isSuccess && shopData?.success) {
+      dispatch(setSeller(shopData.data));
+      toast.success(shopData?.message);
+      navigate("/payouts");
+    }
+  }, [isError, isLoading, navigate, shopData, isSuccess, dispatch]);
 
   return (
     <section className="max-w-7xl mx-auto p-4">
@@ -62,18 +77,18 @@ export default function CreateShop() {
           <h1 className="text-3xl font-semibold mt-2.5">Create your shop</h1>
         </div>
         <div className="w-full max-w-md border rounded-lg p-6  shadow-sm">
-          {/* {isError && (
+          {isError && (
             <Alert
               variant="destructive"
               className="mb-5 border-red-500 bg-red-50"
             >
               <AlertCircleIcon />
-              <AlertTitle>Unable to sing up.</AlertTitle>
+              <AlertTitle>Unable to create shop.</AlertTitle>
               <AlertDescription>
                 <p>{shopData?.message}</p>
               </AlertDescription>
             </Alert>
-          )} */}
+          )}
           <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
             <FieldGroup>
               <Controller

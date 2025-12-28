@@ -13,7 +13,7 @@ async function main(): Promise<void> {
 
     // Start server
     app.listen(port, () => {
-      console.log(`Auth service is listening on port: ${port}`);
+      console.log(`Shop service is listening on port: ${port}`);
     });
   } catch (err) {
     console.error("Failed to start server:", err);

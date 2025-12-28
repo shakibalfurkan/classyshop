@@ -10,6 +10,4 @@ async function connectToMongoDB() {
   }
 }
 
-export const Database = {
-  connectToMongoDB,
-};
+export default connectToMongoDB;

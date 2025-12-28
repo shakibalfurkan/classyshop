@@ -2,9 +2,9 @@ import express, { type Request, type Response } from "express";
 
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import notFoundError from "./app/middlewares/notFoundError.js";
-import globalErrorHandler from "./app/middlewares/globalErrorHandler.js";
 import globalRouter from "./app/routes/index.js";
+import globalErrorHandler from "./app/middlewares/globalErrorHandler.js";
+import notFoundError from "./app/middlewares/notFoundError.js";
 
 export async function createApp(): Promise<express.Express> {
   const app = express();
@@ -27,7 +27,7 @@ export async function createApp(): Promise<express.Express> {
   app.get("/", (req: Request, res: Response) => {
     res.status(200).json({
       success: true,
-      message: "Welcome to the auth service!",
+      message: "Welcome to the shop service!",
     });
   });
 

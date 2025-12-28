@@ -5,6 +5,7 @@
   "main": "server.js",
   "scripts": {
     "dev": "tsc --watch --noEmit & tsx --watch ./src/server.ts",
+    "watch": "tsc --watch --noEmit",
     "start": "node ./dist/server.js",
     "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
