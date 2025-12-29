@@ -4,12 +4,19 @@ export const shopApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     createShop: builder.mutation({
       query: (shopInfo) => ({
-        url: "/shop/api/v1/seller/create-shop",
+        url: "/auth/api/v1/seller/create-shop",
         method: "POST",
         body: shopInfo,
+      }),
+    }),
+    connectStripeAccount: builder.mutation({
+      query: () => ({
+        url: "/auth/api/v1/seller/create-stripe-connection-link",
+        method: "POST",
       }),
     }),
   }),
 });
 
-export const { useCreateShopMutation } = shopApi;
+export const { useCreateShopMutation, useConnectStripeAccountMutation } =
+  shopApi;

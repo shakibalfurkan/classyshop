@@ -1,12 +1,14 @@
 import type { NextFunction, Request, Response } from "express";
 import catchAsync from "../utils/catchAsync.js";
 import AppError from "../errors/AppError.js";
-import { jwtHelper } from "../../utils/jwtHelper/index.js";
+
 import config from "../config/index.js";
 import type { JwtPayload } from "jsonwebtoken";
 import { USER_ROLES } from "../constant/index.js";
-import User from "../modules/user/user.model.js";
+
 import { AuthError } from "../errors/authError.js";
+
+import { jwtHelper } from "../utils/jwtHelper/index.js";
 import Seller from "../modules/seller/seller.model.js";
 
 export const auth = (
@@ -32,14 +34,9 @@ export const auth = (
 
     const { id, email, role } = decodedToken;
 
-    const user =
-      role === USER_ROLES.USER
-        ? await User.findOne({ email })
-        : role === USER_ROLES.SELLER
-        ? await Seller.findOne({ email })
-        : null;
+    const seller = await Seller.findOne({ email });
 
-    if (!user) {
+    if (!seller) {
       throw new AppError(401, "You are not authorized!");
     }
 
@@ -47,9 +44,9 @@ export const auth = (
       return AuthError(req, res);
     }
 
-    req.user = {
-      id: user._id,
-      email: user.email,
+    req.seller = {
+      id: seller._id,
+      email: seller.email,
       role,
     };
 

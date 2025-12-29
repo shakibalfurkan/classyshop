@@ -217,35 +217,29 @@ const createShopValidationSchema = z.object({
       })
       .min(2, { error: "Name must be 2 characters long" })
       .trim(),
-  }),
-  bio: z.string({
-    error: (issue) =>
-      issue.input === undefined ? "Bio is required" : "Bio must be a string",
-  }),
-  address: z.string({
-    error: (issue) =>
-      issue.input === undefined
-        ? "Address is required"
-        : "Address must be a string",
-  }),
-  openingHours: z.string({
-    error: (issue) =>
-      issue.input === undefined
-        ? "Opening hours is required"
-        : "Opening hours must be a string",
-  }),
-  website: z.string().optional(),
-  category: z.string({
-    error: (issue) =>
-      issue.input === undefined
-        ? "Category is required"
-        : "Category must be a string",
-  }),
-  sellerId: z.string({
-    error: (issue) =>
-      issue.input === undefined
-        ? "Seller ID is required"
-        : "Seller ID must be a string",
+    bio: z.string({
+      error: (issue) =>
+        issue.input === undefined ? "Bio is required" : "Bio must be a string",
+    }),
+    address: z.string({
+      error: (issue) =>
+        issue.input === undefined
+          ? "Address is required"
+          : "Address must be a string",
+    }),
+    openingHours: z.string({
+      error: (issue) =>
+        issue.input === undefined
+          ? "Opening hours is required"
+          : "Opening hours must be a string",
+    }),
+    website: z.string().optional(),
+    category: z.string({
+      error: (issue) =>
+        issue.input === undefined
+          ? "Category is required"
+          : "Category must be a string",
+    }),
   }),
 });
 

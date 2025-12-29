@@ -50,13 +50,10 @@ export default function CreateShop() {
   const [createShop, { data: shopData, isLoading, isSuccess, isError, error }] =
     useCreateShopMutation();
 
-  const {
-    handleSubmit,
-    control,
-    formState: { errors },
-  } = useForm<TFormData>({
+  const { handleSubmit, control } = useForm<TFormData>({
     resolver: zodResolver(createShopSchema),
   });
+  console.log(shopData);
 
   const onSubmit = (data: TFormData) => {
     createShop(data);
@@ -85,7 +82,11 @@ export default function CreateShop() {
               <AlertCircleIcon />
               <AlertTitle>Unable to create shop.</AlertTitle>
               <AlertDescription>
-                <p>{shopData?.message}</p>
+                <p>
+                  {error &&
+                    "data" in error &&
+                    (error.data as TErrorResponse)?.message}
+                </p>
               </AlertDescription>
             </Alert>
           )}

@@ -6,19 +6,14 @@ import type {
   TRegisterPayload,
   TUserVerificationPayload,
 } from "./auth.interface.js";
-import checkOtpRestrictions from "../../../utils/checkOtpRestrictions.js";
-import trackOtpRequests from "../../../utils/trackOtpRequests.js";
-import sendOtp from "../../../utils/sendOtp.js";
-import verifyOtp from "../../../utils/verifyOtp.js";
 
-import { createToken, jwtHelper } from "../../../utils/jwtHelper/index.js";
 import config from "../../config/index.js";
 import { USER_ROLES } from "../../constant/index.js";
 
 import type { JwtPayload } from "jsonwebtoken";
 
 import Seller from "../seller/seller.model.js";
-import Shop from "../shop/shop.model.js";
+
 import { Stripe } from "stripe";
 import {
   hashPassword,
@@ -26,6 +21,12 @@ import {
 } from "../../utils/passwordManager.js";
 import { setCookie } from "../../utils/cookieHandler.js";
 import { sendEmail } from "../../utils/sendMail.js";
+import Shop from "../shop/shop.model.js";
+import { createToken, jwtHelper } from "../../utils/jwtHelper/index.js";
+import checkOtpRestrictions from "../../utils/checkOtpRestrictions.js";
+import trackOtpRequests from "../../utils/trackOtpRequests.js";
+import sendOtp from "../../utils/sendOtp.js";
+import verifyOtp from "../../utils/verifyOtp.js";
 
 export const stripe = new Stripe(config.stripe_secret_key!, {
   apiVersion: "2025-12-15.clover",
@@ -421,11 +422,10 @@ const createShopIntoDB = async (payload: {
 }) => {
   const { name, bio, address, openingHours, website, category, sellerId } =
     payload;
+  console.log(payload);
   if (!name || !bio || !address || !openingHours || !category || !sellerId) {
     throw new AppError(400, "All fields are required!");
   }
-
-  throw new AppError(500, "Shop creation is disabled temporarily.");
 
   const shopData: any = {
     name,
@@ -474,12 +474,14 @@ const createStripeConnectionLink = async (sellerId: string) => {
 
   const accountLink = await stripe.accountLinks.create({
     account: seller.stripeAccountId,
-    refresh_url: `${process.env.CLIENT_URL}/stripe-refresh`,
-    return_url: `${process.env.CLIENT_URL}/stripe-success`,
+    refresh_url: `${config.seller_client_url}/stripe-refresh`,
+    return_url: `${config.seller_client_url}/stripe-success`,
     type: "account_onboarding",
   });
 
-  return accountLink.url;
+  console.log(accountLink);
+
+  return { url: accountLink.url };
 };
 
 export const AuthService = {

@@ -168,7 +168,9 @@ const loginSeller = catchAsync(async (req: Request, res: Response) => {
 });
 
 const createShop = catchAsync(async (req: Request, res: Response) => {
-  const result = await AuthService.createShopIntoDB(req.body);
+  const sellerId = req.user?.id;
+
+  const result = await AuthService.createShopIntoDB({ ...req.body, sellerId });
 
   sendResponse(res, {
     statusCode: 201,
@@ -181,6 +183,7 @@ const createShop = catchAsync(async (req: Request, res: Response) => {
 const createStripeConnectionLink = catchAsync(
   async (req: Request, res: Response) => {
     const sellerId = req.user?.id;
+    console.log({ sellerId });
     const result = await AuthService.createStripeConnectionLink(sellerId!);
 
     sendResponse(res, {
