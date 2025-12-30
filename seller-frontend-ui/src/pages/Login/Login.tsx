@@ -18,7 +18,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Link, useNavigate } from "react-router";
 import { useLoginMutation } from "@/redux/features/auth/authApi";
 import { toast } from "sonner";
-import { useAppDispatch } from "@/redux/hook";
+import { useAppDispatch, useAppSelector } from "@/redux/hook";
 import { setSeller } from "@/redux/features/auth/authSlice";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircleIcon } from "lucide-react";
@@ -37,6 +37,7 @@ export default function Login() {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const { isSellerLoading } = useAppSelector((state) => state.auth);
 
   const [login, { data: sellerData, isError, isSuccess, isLoading, error }] =
     useLoginMutation();
@@ -58,13 +59,25 @@ export default function Login() {
     login({ email: data.email, password: data.password });
   };
 
+  console.log(error);
+
   useEffect(() => {
     if (!isLoading && isSuccess && sellerData?.success) {
       dispatch(setSeller(sellerData.data));
       toast.success(sellerData?.message);
-      navigate("/create-shop");
+      if (!isSellerLoading) {
+        navigate("/create-shop");
+      }
     }
-  }, [isError, isLoading, navigate, sellerData, isSuccess, dispatch]);
+  }, [
+    isError,
+    isLoading,
+    navigate,
+    sellerData,
+    isSuccess,
+    dispatch,
+    isSellerLoading,
+  ]);
 
   return (
     <section className="max-w-7xl mx-auto p-4">
@@ -82,10 +95,7 @@ export default function Login() {
         </div>
         <div className="w-full max-w-md border rounded-lg p-6 shadow-sm">
           {isError && (
-            <Alert
-              variant="destructive"
-              className="mb-5 border-red-500 bg-red-50"
-            >
+            <Alert variant="destructive" className="mb-5 border-red-500">
               <AlertCircleIcon />
               <AlertTitle>Unable to sing in.</AlertTitle>
               <AlertDescription>

@@ -1,6 +1,5 @@
-import { createBrowserRouter } from "react-router";
-import App from "../App";
-import Home from "../pages/Home/Home";
+import { createBrowserRouter, Navigate } from "react-router";
+
 import Login from "../pages/Login/Login";
 import Signup from "@/pages/Signup/Signup";
 import VerifyOTP from "@/pages/VerifyOtp/VerifyOtp";
@@ -8,18 +7,27 @@ import CreateShop from "@/pages/CreateShop/CreateShop";
 import Payouts from "@/pages/Payouts/Payouts";
 import StripeRefresh from "@/pages/StripeRefresh/StripeRefresh";
 import StripeSuccess from "@/pages/StripeSuccess/StripeSuccess";
+import PrivateRoute from "@/middleware/PrivateRoute";
+import MainLayout from "@/layouts/MainLayout";
+import Overview from "@/pages/Overview/Overview";
 
 export const router: ReturnType<typeof createBrowserRouter> =
   createBrowserRouter([
     {
-      path: "/",
-      element: <App />,
+      element: <PrivateRoute />,
       children: [
-        { index: true, element: <Home /> },
-        { path: "/create-shop", element: <CreateShop /> },
-        { path: "/payouts", element: <Payouts /> },
-        { path: "/stripe-refresh", element: <StripeRefresh /> },
-        { path: "/stripe-success", element: <StripeSuccess /> },
+        {
+          element: <MainLayout />,
+          children: [
+            { index: true, element: <Navigate to="/dashboard" replace /> },
+            { path: "dashboard", element: <Overview /> },
+            { path: "payouts", element: <Payouts /> },
+          ],
+        },
+
+        { path: "create-shop", element: <CreateShop /> },
+        { path: "stripe-refresh", element: <StripeRefresh /> },
+        { path: "stripe-success", element: <StripeSuccess /> },
       ],
     },
     { path: "/login", element: <Login /> },

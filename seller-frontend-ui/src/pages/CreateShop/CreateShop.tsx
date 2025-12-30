@@ -75,10 +75,7 @@ export default function CreateShop() {
         </div>
         <div className="w-full max-w-md border rounded-lg p-6  shadow-sm">
           {isError && (
-            <Alert
-              variant="destructive"
-              className="mb-5 border-red-500 bg-red-50"
-            >
+            <Alert variant="destructive" className="mb-5 border-red-500">
               <AlertCircleIcon />
               <AlertTitle>Unable to create shop.</AlertTitle>
               <AlertDescription>

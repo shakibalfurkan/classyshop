@@ -28,7 +28,7 @@ export default function VerifyOTP() {
 
   const [
     verifySeller,
-    { data: sellerData, isError, isSuccess: isVerifySuccess, isLoading },
+    { data: sellerData, isError, isSuccess: isVerifySuccess, isLoading, error },
   ] = useVerifySellerMutation();
 
   const [
@@ -53,7 +53,7 @@ export default function VerifyOTP() {
       toast.success(sellerData?.message);
       navigate("/login");
     }
-
+    console.log(error);
     if (!isLoading && isError && !sellerData?.success) {
       toast.error(sellerData?.message);
     }

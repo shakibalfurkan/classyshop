@@ -1,22 +1,27 @@
 import { useAppSelector } from "@/redux/hook";
-import type { ReactNode } from "react";
-import { Navigate, useLocation } from "react-router";
+import { Navigate, Outlet, useLocation } from "react-router";
 
-const PrivateRoute = ({ children }: { children: ReactNode }) => {
+const PrivateRoute = () => {
   const { seller, isSellerLoading } = useAppSelector((state) => state.auth);
   const location = useLocation();
 
   if (isSellerLoading) {
     return (
-      <div className="flex justify-center items-center h-screen">
-        <p>Loading...</p>
+      <div className="flex justify-center items-center h-screen bg-gray-50">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2  border-primary-600 mx-auto mb-4"></div>
+          <p className="text-gray-600 font-medium">
+            Verifying authentication...
+          </p>
+        </div>
       </div>
     );
   }
-  if (seller && seller._id) {
-    return children;
+
+  if (!seller?._id) {
+    return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
-  return <Navigate state={location.pathname} to={"/login"}></Navigate>;
+  return <Outlet />;
 };
 export default PrivateRoute;

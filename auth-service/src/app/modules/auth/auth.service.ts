@@ -374,12 +374,9 @@ const loginSeller = async (payload: TLoginPayload, res: Response) => {
   if (!seller) {
     throw new AppError(400, "Seller does not exist!");
   }
-
-  const passwordMatch = await isPasswordMatched(
-    plainPassword,
-    seller?.password as string
-  );
-
+  console.log(plainPassword, seller.password);
+  const passwordMatch = await isPasswordMatched(plainPassword, seller.password);
+  console.log(passwordMatch);
   if (!passwordMatch) {
     throw new AppError(400, "Invalid credentials!");
   }
