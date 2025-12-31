@@ -53,9 +53,11 @@ export default function VerifyOTP() {
       toast.success(sellerData?.message);
       navigate("/login");
     }
-    console.log(error);
+
     if (!isLoading && isError && !sellerData?.success) {
-      toast.error(sellerData?.message);
+      toast.error(
+        error && "data" in error && (error.data as { message: string })?.message
+      );
     }
   }, [
     isError,
@@ -64,6 +66,7 @@ export default function VerifyOTP() {
     navigate,
     sellerData?.message,
     sellerData?.success,
+    error,
   ]);
 
   const handleResendOtp = () => {

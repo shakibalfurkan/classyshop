@@ -9,7 +9,7 @@ import StripeRefresh from "@/pages/StripeRefresh/StripeRefresh";
 import StripeSuccess from "@/pages/StripeSuccess/StripeSuccess";
 import PrivateRoute from "@/middleware/PrivateRoute";
 import MainLayout from "@/layouts/MainLayout";
-import Overview from "@/pages/Overview/Overview";
+import Dashboard from "@/pages/Dashboard/Dashboard";
 
 export const router: ReturnType<typeof createBrowserRouter> =
   createBrowserRouter([
@@ -20,7 +20,7 @@ export const router: ReturnType<typeof createBrowserRouter> =
           element: <MainLayout />,
           children: [
             { index: true, element: <Navigate to="/dashboard" replace /> },
-            { path: "dashboard", element: <Overview /> },
+            { path: "dashboard", element: <Dashboard /> },
             { path: "payouts", element: <Payouts /> },
           ],
         },

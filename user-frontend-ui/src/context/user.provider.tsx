@@ -23,7 +23,7 @@ export type TUserProviderValues = {
   user: TUser | null;
   setUser: Dispatch<SetStateAction<TUser | null>>;
   isUserLoading: boolean;
-  setIsUserLoading: Dispatch<SetStateAction<boolean>>;
+  refetchUser: () => void;
 };
 
 const UserContext = createContext<TUserProviderValues | null>(null);
@@ -35,6 +35,7 @@ const UserProvider = ({ children }: { children: React.ReactNode }) => {
   console.log(user);
 
   const handleUser = async () => {
+    setIsUserLoading(true);
     try {
       const response = await getUserFromDB();
       setUser(response?.data || null);
@@ -48,7 +49,7 @@ const UserProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     handleUser();
-  }, [isUserLoading]);
+  }, []);
 
   return (
     <UserContext.Provider
@@ -56,7 +57,7 @@ const UserProvider = ({ children }: { children: React.ReactNode }) => {
         user,
         setUser,
         isUserLoading,
-        setIsUserLoading,
+        refetchUser: handleUser,
       }}
     >
       {children}

@@ -16,7 +16,6 @@ export const auth = (
 ) => {
   return catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     const token =
-      req.cookies.userAccessToken ||
       req.cookies.sellerAccessToken ||
       req.cookies.adminAccessToken ||
       req.headers.authorization?.split(" ")[1];

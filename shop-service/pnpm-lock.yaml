@@ -32,6 +32,9 @@ importers:
       nodemailer:
         specifier: ^7.0.12
         version: 7.0.12
+      stripe:
+        specifier: ^20.1.0
+        version: 20.1.0(@types/node@25.0.3)
       tsx:
         specifier: ^4.21.0
         version: 4.21.0
@@ -1000,6 +1003,15 @@ packages:
   statuses@2.0.2:
     resolution: {integrity: sha512-DvEy55V3DB7uknRo+4iOGT5fP1slR8wQohVdknigZPMpMstaKJQWhwiYBACJE3Ul2pTnATihhBYnRhZQHGBiRw==}
     engines: {node: '>= 0.8'}
+
+  stripe@20.1.0:
+    resolution: {integrity: sha512-o1VNRuMkY76ZCq92U3EH3/XHm/WHp7AerpzDs4Zyo8uE5mFL4QUcv/2SudWsSnhBSp4moO2+ZoGCZ7mT8crPmQ==}
+    engines: {node: '>=16'}
+    peerDependencies:
+      '@types/node': '>=16'
+    peerDependenciesMeta:
+      '@types/node':
+        optional: true
 
   strnum@2.1.2:
     resolution: {integrity: sha512-l63NF9y/cLROq/yqKXSLtcMeeyOfnSQlfMSlzFt/K73oIaD8DGaQWd7Z34X9GPiKqP5rbSh84Hl4bOlLcjiSrQ==}
@@ -2342,6 +2354,12 @@ snapshots:
       memory-pager: 1.5.0
 
   statuses@2.0.2: {}
+
+  stripe@20.1.0(@types/node@25.0.3):
+    dependencies:
+      qs: 6.14.0
+    optionalDependencies:
+      '@types/node': 25.0.3
 
   strnum@2.1.2: {}
 

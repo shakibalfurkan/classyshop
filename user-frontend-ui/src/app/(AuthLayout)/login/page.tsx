@@ -32,7 +32,7 @@ type TFormData = {
 
 export default function Login() {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-  const { setIsUserLoading } = useUser();
+  const { refetchUser } = useUser();
 
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -71,7 +71,7 @@ export default function Login() {
     if (!isSuccess) return;
 
     const run = async () => {
-      setIsUserLoading(true);
+      refetchUser();
       router.push(redirect ?? "/");
     };
 
