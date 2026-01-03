@@ -21,6 +21,10 @@ const sellerSchema = new Schema<TSeller>(
       required: true,
       trim: true,
     },
+    avatar: {
+      type: String,
+      default: null,
+    },
     country: {
       type: String,
       required: true,

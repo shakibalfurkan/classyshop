@@ -5,6 +5,7 @@ export type TSeller = {
   name: string;
   email: string;
   phoneNumber: string;
+  avatar: string;
   country: string;
   password: string;
   stripeId?: string;

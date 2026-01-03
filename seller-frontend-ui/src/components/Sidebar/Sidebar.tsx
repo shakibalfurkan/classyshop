@@ -1,4 +1,5 @@
 import SidebarBody from "./SidebarBody";
+import SidebarFooter from "./SidebarFooter";
 import SidebarHeader from "./SidebarHeader";
 
 export default function Sidebar() {
@@ -16,7 +17,7 @@ export default function Sidebar() {
       <SidebarBody />
 
       {/* footer */}
-      <div>footer</div>
+      <SidebarFooter />
     </aside>
   );
 }

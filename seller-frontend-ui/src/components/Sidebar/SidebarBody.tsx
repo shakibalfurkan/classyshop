@@ -2,7 +2,6 @@ import { useLocation } from "react-router";
 import SidebarMenu from "./SidebarMenu";
 import SidebarMenuItem from "./SidebarMenuItem";
 import { RiDashboardFill } from "react-icons/ri";
-import { GoListOrdered } from "react-icons/go";
 import { IoMdWallet } from "react-icons/io";
 import { AiOutlinePlusSquare } from "react-icons/ai";
 import {
@@ -13,6 +12,7 @@ import {
   LuCalendarDays,
   LuBellRing,
   LuTicketSlash,
+  LuListOrdered,
 } from "react-icons/lu";
 
 export default function SidebarBody() {
@@ -27,14 +27,14 @@ export default function SidebarBody() {
         icon={<RiDashboardFill />}
         isActive={pathname === "/dashboard"}
       />
-      <div className="mt-6 space-y-6">
+      <div className="mt-4 space-y-4">
         {/*Main Menu */}
         <SidebarMenu title="Main">
           {/* orders */}
           <SidebarMenuItem
             title="Orders"
             to="/dashboard/orders"
-            icon={<GoListOrdered />}
+            icon={<LuListOrdered />}
             isActive={pathname === "/dashboard/orders"}
           />
           {/* payments */}
