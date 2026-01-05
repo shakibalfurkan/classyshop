@@ -28,7 +28,7 @@ export default function AppInitializer({
   if (isLoading) {
     return (
       <div className="flex justify-center items-center min-h-screen">
-        <div className="text-center">
+        <div className="flex flex-col justify-center items-center">
           <Spinner className="w-12 h-12 text-primary-600" />
           <p className="mt-4 font-medium">Initializing application...</p>
         </div>

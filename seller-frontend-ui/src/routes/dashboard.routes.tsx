@@ -3,6 +3,7 @@ import { Navigate, type RouteObject } from "react-router";
 import { lazy, Suspense } from "react";
 import DashboardLayout from "@/layouts/DashboardLayout";
 import ShopRoute from "@/middleware/ShopRoute";
+import CreateProduct from "@/pages/CreateProduct/CreateProduct";
 
 const Dashboard = lazy(() => import("@/pages/Dashboard/Dashboard"));
 
@@ -29,6 +30,14 @@ export const dashboardRoutes: RouteObject[] = [
                     element: (
                       <Suspense fallback={null}>
                         <Dashboard />
+                      </Suspense>
+                    ),
+                  },
+                  {
+                    path: "create-product",
+                    element: (
+                      <Suspense fallback={null}>
+                        <CreateProduct />
                       </Suspense>
                     ),
                   },

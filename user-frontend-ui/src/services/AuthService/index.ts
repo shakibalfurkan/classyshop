@@ -6,7 +6,7 @@ import envConfig from "@/config/envConfig";
 export const registerUser = async (userData: FieldValues) => {
   try {
     const { data } = await axiosClient.post(
-      "/auth/api/v1/user/register",
+      "/auth/api/v1/users/register",
       userData
     );
     return data;
@@ -26,7 +26,7 @@ export const registerUser = async (userData: FieldValues) => {
 export const verifyUser = async (userData: FieldValues) => {
   try {
     const { data } = await axiosClient.post(
-      "/auth/api/v1/user/verify",
+      "/auth/api/v1/users/verify",
       userData
     );
     return data;
@@ -47,7 +47,7 @@ export const verifyUser = async (userData: FieldValues) => {
 export const loginUser = async (userData: FieldValues) => {
   try {
     const { data } = await axiosClient.post(
-      "/auth/api/v1/user/login",
+      "/auth/api/v1/users/login",
       userData
     );
 
@@ -92,7 +92,7 @@ export const logout = async () => {
 export const forgotUserPassword = async (userData: FieldValues) => {
   try {
     const { data } = await axiosClient.post(
-      "/auth/api/v1/user/forgot-password",
+      "/auth/api/v1/users/forgot-password",
       userData
     );
 
@@ -113,7 +113,7 @@ export const forgotUserPassword = async (userData: FieldValues) => {
 export const resetUserPassword = async (userData: FieldValues) => {
   try {
     const { data } = await axiosClient.post(
-      "/auth/api/v1/user/reset-password",
+      "/auth/api/v1/users/reset-password",
       userData
     );
 
@@ -134,7 +134,7 @@ export const resetUserPassword = async (userData: FieldValues) => {
 export const changeUserPassword = async (userData: FieldValues) => {
   try {
     const { data } = await axiosClient.post(
-      "/auth/api/v1/user/change-password",
+      "/auth/api/v1/users/change-password",
       userData
     );
 
@@ -194,7 +194,7 @@ export const getNewAccessToken = async () => {
 
 export const getUserFromDB = async () => {
   try {
-    const { data } = await axiosClient.get(`/auth/api/v1/me`);
+    const { data } = await axiosClient.get(`/auth/api/v1/users/me`);
     return data;
   } catch (error) {
     if (isAxiosError(error)) {

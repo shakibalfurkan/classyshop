@@ -10,9 +10,9 @@ import {
   LuMail,
   LuSettings,
   LuCalendarDays,
-  LuBellRing,
   LuTicketSlash,
   LuListOrdered,
+  LuBell,
 } from "react-icons/lu";
 
 export default function SidebarBody() {
@@ -102,7 +102,7 @@ export default function SidebarBody() {
           <SidebarMenuItem
             title="Notifications"
             to="/dashboard/notifications"
-            icon={<LuBellRing />}
+            icon={<LuBell />}
             isActive={pathname === "/dashboard/notifications"}
           />
         </SidebarMenu>
