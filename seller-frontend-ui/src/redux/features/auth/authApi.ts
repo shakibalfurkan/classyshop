@@ -1,5 +1,4 @@
 import { baseApi } from "@/redux/api/baseApi";
-import type { TSeller, TShop } from "./authSlice";
 
 export const authApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -31,14 +30,7 @@ export const authApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["Auth"],
     }),
-    getMe: builder.query<
-      {
-        success: boolean;
-        message: string;
-        data: { seller: TSeller; shop: TShop | null };
-      },
-      void
-    >({
+    getMe: builder.query({
       query: () => ({
         url: "/auth/api/v1/sellers/me",
         method: "GET",
