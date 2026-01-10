@@ -105,7 +105,7 @@ export default function Signup() {
                     <Input
                       {...field}
                       id="name"
-                      type="name"
+                      type="text"
                       aria-invalid={fieldState.invalid}
                       placeholder="Enter your name"
                     />

@@ -52,6 +52,14 @@ export default function CreateShop() {
 
   const { handleSubmit, control } = useForm<TFormData>({
     resolver: zodResolver(createShopSchema),
+    defaultValues: {
+      name: "",
+      bio: "",
+      address: "",
+      openingHours: "",
+      website: "",
+      category: "",
+    },
   });
 
   const onSubmit = (data: TFormData) => {
@@ -97,7 +105,7 @@ export default function CreateShop() {
                     <Input
                       {...field}
                       id="name"
-                      type="name"
+                      type="text"
                       aria-invalid={fieldState.invalid}
                       placeholder="shop name"
                     />
@@ -119,7 +127,7 @@ export default function CreateShop() {
                     <Input
                       {...field}
                       id="bio"
-                      type="string"
+                      type="text"
                       aria-invalid={fieldState.invalid}
                       placeholder="shop bio"
                     />
@@ -139,7 +147,7 @@ export default function CreateShop() {
                     <Input
                       {...field}
                       id="address"
-                      type="string"
+                      type="text"
                       aria-invalid={fieldState.invalid}
                       placeholder="shop address"
                     />
@@ -161,7 +169,7 @@ export default function CreateShop() {
                     <Input
                       {...field}
                       id="openingHours"
-                      type="string"
+                      type="text"
                       aria-invalid={fieldState.invalid}
                       placeholder="e.g. Mon-Fri 9am - 5pm"
                     />
@@ -181,7 +189,7 @@ export default function CreateShop() {
                     <Input
                       {...field}
                       id="website"
-                      type="string"
+                      type="text"
                       aria-invalid={fieldState.invalid}
                       placeholder="https://example.com"
                     />
